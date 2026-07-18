@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
 import {
-  mockDestinations,
   mockCourses,
   mockTests,
 } from '../data/mockData'
+import { mockDestinations } from '../data/destinations'
 import type {
-  Destination,
   Course,
   TestPrep,
 } from '../data/mockData'
+import type { Destination } from '../types/destination'
 
 export function useDestinations() {
   const [destinations, setDestinations] = useState<Destination[]>([])

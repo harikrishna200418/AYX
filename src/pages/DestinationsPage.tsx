@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDestinations } from '../hooks/useDataHooks'
 import { PillButton } from '../components/ui/PillButton'
+import { DestinationCard } from '../components/destinations/DestinationCard'
 
 export const DestinationsPage: React.FC = () => {
   const { destinations, loading } = useDestinations()
@@ -17,8 +18,14 @@ export const DestinationsPage: React.FC = () => {
 
   const filteredDestinations = destinations.filter((dest) => {
     if (regionFilter && dest.region !== regionFilter) return false
-    if (popularityFilter && dest.popularity !== popularityFilter) return false
-    if (budgetFilter && dest.budget !== budgetFilter) return false
+    if (popularityFilter) {
+      if (popularityFilter === 'high' && !dest.isPopular) return false
+      if (popularityFilter === 'emerging' && dest.isPopular) return false
+    }
+    if (budgetFilter) {
+      if (budgetFilter === 'eco' && !dest.isAffordable) return false
+      if (budgetFilter === 'prem' && dest.isAffordable) return false
+    }
     return true
   })
 
@@ -51,9 +58,11 @@ export const DestinationsPage: React.FC = () => {
                 className="w-full bg-transparent border-none focus:ring-0 text-on-surface font-body text-body-md py-2 cursor-pointer outline-none"
               >
                 <option value="">Select Region</option>
-                <option value="na">North America</option>
-                <option value="eu">Europe</option>
-                <option value="ap">Asia Pacific</option>
+                <option value="North America">North America</option>
+                <option value="Europe">Europe</option>
+                <option value="Asia">Asia</option>
+                <option value="Oceania">Oceania</option>
+                <option value="Middle East">Middle East</option>
               </select>
             </div>
 
@@ -111,97 +120,16 @@ export const DestinationsPage: React.FC = () => {
           </div>
         ) : (
           <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredDestinations.map((dest) => {
+            {filteredDestinations.map((dest, index) => {
               // Standardize: Make first element span multiple columns if it's the United States
               const isUS = dest.id === 'united-states'
-              const gridClass = isUS
-                ? 'md:col-span-2 lg:col-span-2 row-span-2 min-h-[400px]'
-                : 'h-[400px]'
 
               return (
-                <Link
-                  key={dest.id}
-                  to={`/destinations/${dest.id}`}
-                  className={`glass-card rounded-[2rem] overflow-hidden flex flex-col group relative select-none ${gridClass}`}
-                >
-                  {isUS ? (
-                    /* Hero Style Card for US */
-                    <>
-                      <div className="absolute inset-0 w-full h-full">
-                        <img
-                          src={dest.imageUrl}
-                          alt={dest.name}
-                          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/50 to-transparent" />
-                      </div>
-                      
-                      {/* Top elements */}
-                      <div className="absolute top-6 right-6 z-10">
-                        <span className="bg-gradient-to-r from-error to-[#ff8988] shadow-[0_4px_12px_rgba(186,26,26,0.3)] text-white font-headline text-label-md px-4 py-1.5 rounded-full flex items-center">
-                          <span className="material-symbols-outlined text-[16px] mr-1" style={{ fontVariationSettings: "'FILL' 1" }}>local_fire_department</span>
-                          Featured Path
-                        </span>
-                      </div>
-                      <div className="absolute top-6 left-6 z-10 bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/30 shadow-md font-headline font-bold text-white text-lg">
-                        {dest.flag} {dest.name}
-                      </div>
-
-                      {/* Bottom Copy */}
-                      <div className="mt-auto relative z-10 p-8 text-white">
-                        <h3 className="font-headline text-[32px] md:text-[40px] font-bold mb-2 tracking-tight">
-                          {dest.name}
-                        </h3>
-                        <p className="text-body-lg text-white/90 max-w-xl">
-                          {dest.description}
-                        </p>
-                        <div className="mt-6 flex flex-wrap gap-4 border-t border-white/20 pt-6 text-sm">
-                          <div className="flex items-center gap-2">
-                            <span className="material-symbols-outlined text-white/70">work</span>
-                            <span className="font-headline font-bold">Visa Rate: {dest.visaSuccess}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <span className="material-symbols-outlined text-white/70">school</span>
-                            <span className="font-headline font-bold">{dest.workPermit}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    /* Standard Card Style */
-                    <>
-                      <div className="absolute inset-0 w-full h-[45%] overflow-hidden">
-                        <img
-                          src={dest.imageUrl}
-                          alt={dest.name}
-                          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/60 dark:to-surface/80" />
-                      </div>
-                      
-                      <div className="mt-auto h-[60%] bg-white/60 backdrop-blur-xl p-6 rounded-t-[2rem] relative z-10 flex flex-col border-t border-white/50 justify-between">
-                        {/* Floating Flag */}
-                        <div className="absolute -top-6 right-6 w-12 h-12 bg-white rounded-full shadow-lg border border-white/50 flex items-center justify-center text-2xl font-bold">
-                          {dest.flag}
-                        </div>
-                        
-                        <div>
-                          <h3 className="font-headline text-headline-md text-primary font-bold mb-2">
-                            {dest.name}
-                          </h3>
-                          <p className="text-body-md text-sm text-on-surface-variant line-clamp-3">
-                            {dest.description}
-                          </p>
-                        </div>
-                        
-                        <div className="flex items-center text-secondary font-headline text-label-md group-hover:translate-x-1.5 transition-all duration-300">
-                          Explore Opportunities{' '}
-                          <span className="material-symbols-outlined text-[18px] ml-1">arrow_forward</span>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </Link>
+                <DestinationCard 
+                  key={dest.id} 
+                  dest={dest} 
+                  isFeatured={isUS} 
+                />
               )
             })}
           </section>
