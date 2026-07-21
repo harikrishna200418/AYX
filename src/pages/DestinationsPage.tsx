@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useDestinations } from '../hooks/useDataHooks'
 import { PillButton } from '../components/ui/PillButton'
 import { DestinationCard } from '../components/destinations/DestinationCard'
@@ -48,7 +47,7 @@ export const DestinationsPage: React.FC = () => {
           </p>
 
           {/* Filter Panel */}
-          <div className="bg-white/30 backdrop-blur-[15px] border border-white/20 rounded-full p-2.5 flex flex-col md:flex-row gap-3 items-center w-full max-w-4xl mx-auto shadow-glass">
+          <div className="glass-panel rounded-full p-2.5 flex flex-col md:flex-row gap-3 items-center w-full max-w-4xl mx-auto shadow-glass">
             {/* Region */}
             <div className="flex-1 flex items-center px-4 w-full border-b md:border-b-0 md:border-r border-white/30 pb-2.5 md:pb-0">
               <span className="material-symbols-outlined text-outline mr-3 select-none">public</span>
@@ -110,7 +109,7 @@ export const DestinationsPage: React.FC = () => {
         {loading ? (
           <div className="text-center py-20 text-body-lg text-on-surface-variant">Loading destinations...</div>
         ) : filteredDestinations.length === 0 ? (
-          <div className="text-center py-20 bg-white/30 backdrop-blur-md rounded-2xl border border-white/20 p-8">
+          <div className="text-center py-20 glass-panel rounded-2xl p-8">
             <span className="material-symbols-outlined text-primary text-5xl mb-4">search_off</span>
             <h3 className="text-headline-md text-primary font-bold mb-2">No Destinations Found</h3>
             <p className="text-body-md text-on-surface-variant mb-6">No countries match your current filter selection.</p>
@@ -120,7 +119,7 @@ export const DestinationsPage: React.FC = () => {
           </div>
         ) : (
           <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredDestinations.map((dest, index) => {
+            {filteredDestinations.map((dest) => {
               // Standardize: Make first element span multiple columns if it's the United States
               const isUS = dest.id === 'united-states'
 
