@@ -4,6 +4,7 @@ import { GlassCard } from '../components/ui/GlassCard'
 import { GlassInput } from '../components/ui/GlassInput'
 import { PillButton } from '../components/ui/PillButton'
 import { GlassSelect } from '../components/ui/GlassSelect'
+import { CourseSelectionModal } from '../components/ui/CourseSelectionModal'
 
 interface Program {
   id: string
@@ -13,6 +14,7 @@ interface Program {
   countryId: string
   level: 'bachelor' | 'master' | 'doctorate'
   field: string
+  courses?: string[]
   tuition: string
   duration: string
   ielts: string
@@ -93,12 +95,104 @@ const fieldOptions = [
   { value: 'emerging', label: 'Emerging & Specialized Programs' },
 ]
 
+export const FIELD_COURSES: Record<string, string[]> = {
+  'cs-it': [
+    'Computer Science', 'Software Engineering', 'Information Technology (IT)',
+    'Artificial Intelligence (AI)', 'Machine Learning', 'Data Science',
+    'Data Analytics', 'Cyber Security', 'Cloud Computing',
+    'Information Systems', 'Blockchain Technology', 'Internet of Things (IoT)',
+    'Game Development', 'Web Development', 'Mobile Application Development',
+    'Computer Engineering', 'Human-Computer Interaction (HCI)', 'Digital Forensics'
+  ],
+  'engineering': [
+    'Mechanical Engineering', 'Civil Engineering', 'Electrical Engineering',
+    'Electronics Engineering', 'Chemical Engineering', 'Aerospace Engineering',
+    'Aeronautical Engineering', 'Automotive Engineering', 'Robotics Engineering',
+    'Biomedical Engineering', 'Environmental Engineering', 'Petroleum Engineering',
+    'Mining Engineering', 'Marine Engineering', 'Industrial Engineering',
+    'Manufacturing Engineering', 'Structural Engineering', 'Mechatronics Engineering',
+    'Agricultural Engineering', 'Materials Engineering', 'Nuclear Engineering'
+  ],
+  'business': [
+    'Business Administration', 'Master of Business Administration (MBA)',
+    'International Business', 'Finance', 'Accounting', 'Marketing',
+    'Human Resource Management (HRM)', 'Business Analytics',
+    'Supply Chain Management', 'Operations Management', 'Project Management',
+    'Entrepreneurship', 'Economics', 'Banking', 'Investment Management',
+    'Hospitality Management', 'Tourism Management', 'Retail Management',
+    'Digital Marketing'
+  ],
+  'health': [
+    'Medicine (MBBS/MD)', 'Nursing', 'Dentistry', 'Pharmacy',
+    'Physiotherapy', 'Occupational Therapy', 'Public Health',
+    'Biomedical Science', 'Medical Laboratory Science', 'Radiography',
+    'Nutrition and Dietetics', 'Optometry', 'Veterinary Medicine',
+    'Speech Therapy', 'Healthcare Management'
+  ],
+  'science': [
+    'Physics', 'Chemistry', 'Biology', 'Biotechnology', 'Biochemistry',
+    'Microbiology', 'Genetics', 'Environmental Science', 'Mathematics',
+    'Statistics', 'Geology', 'Astronomy', 'Marine Science', 'Forensic Science'
+  ],
+  'arts': [
+    'Architecture', 'Interior Design', 'Urban Planning', 'Graphic Design',
+    'Fashion Design', 'Product Design', 'Industrial Design', 'Animation',
+    'Multimedia Design', 'Fine Arts', 'Visual Arts', 'Film Production',
+    'Photography', 'Music', 'Performing Arts'
+  ],
+  'law': [
+    'Law (LLB)', 'International Law', 'Corporate Law', 'Criminal Law',
+    'Intellectual Property Law', 'Human Rights Law', 'Environmental Law',
+    'Tax Law'
+  ],
+  'social': [
+    'Psychology', 'Sociology', 'Political Science', 'International Relations',
+    'Public Administration', 'Anthropology', 'Social Work', 'Criminology',
+    'Gender Studies'
+  ],
+  'education': [
+    'Education', 'Early Childhood Education', 'Primary Education',
+    'Secondary Education', 'Special Education', 'Educational Leadership',
+    'TESOL / TEFL', 'Curriculum and Instruction'
+  ],
+  'agriculture': [
+    'Agriculture', 'Agribusiness', 'Horticulture', 'Forestry',
+    'Fisheries', 'Animal Science', 'Food Science', 'Sustainable Agriculture'
+  ],
+  'media': [
+    'Journalism', 'Mass Communication', 'Public Relations', 'Advertising',
+    'Media Studies', 'Digital Media', 'Broadcasting', 'Communication Studies'
+  ],
+  'aviation': [
+    'Aviation Management', 'Aeronautical Engineering', 'Pilot Training',
+    'Air Traffic Management', 'Maritime Studies', 'Nautical Science',
+    'Shipping & Logistics'
+  ],
+  'hospitality': [
+    'Hotel Management', 'Hospitality Management', 'Tourism Management',
+    'Event Management', 'Culinary Arts'
+  ],
+  'emerging': [
+    'Artificial Intelligence', 'Machine Learning', 'Quantum Computing',
+    'Renewable Energy', 'Sustainable Development', 'Climate Science',
+    'Bioinformatics', 'Nanotechnology', 'Financial Technology (FinTech)',
+    'Health Informatics', 'Sports Management', 'Sports Science',
+    'Actuarial Science', 'Real Estate Management', 'Logistics and Supply Chain',
+    'E-commerce', 'UX/UI Design'
+  ]
+};
+
 export const SearchPage: React.FC = () => {
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCountry, setSelectedCountry] = useState('')
   const [selectedLevel, setSelectedLevel] = useState('')
   const [selectedField, setSelectedField] = useState('')
+  const [selectedCourses, setSelectedCourses] = useState<string[]>([])
+  
+  // Modal State
+  const [isCourseModalOpen, setIsCourseModalOpen] = useState(false)
+  const [activeModalField, setActiveModalField] = useState('')
 
   const programs: Program[] = [
     {
@@ -109,6 +203,7 @@ export const SearchPage: React.FC = () => {
       countryId: 'united-kingdom',
       level: 'master',
       field: 'cs-it',
+      courses: ['Data Science', 'Artificial Intelligence (AI)'],
       tuition: 'Â£36,000 / year',
       duration: '12 Months',
       ielts: '7.5',
@@ -121,6 +216,7 @@ export const SearchPage: React.FC = () => {
       countryId: 'united-kingdom',
       level: 'master',
       field: 'cs-it',
+      courses: ['Machine Learning'],
       tuition: 'Â£38,500 / year',
       duration: '11 Months',
       ielts: '7.5',
@@ -133,6 +229,7 @@ export const SearchPage: React.FC = () => {
       countryId: 'united-states',
       level: 'master',
       field: 'engineering',
+      courses: ['Computer Engineering', 'Computer Science'],
       tuition: '$58,240 / year',
       duration: '2 Years',
       ielts: '7.0',
@@ -145,6 +242,7 @@ export const SearchPage: React.FC = () => {
       countryId: 'united-states',
       level: 'master',
       field: 'cs-it',
+      courses: ['Computer Science', 'Artificial Intelligence (AI)'],
       tuition: '$57,400 / year',
       duration: '2 Years',
       ielts: '7.0',
@@ -157,6 +255,7 @@ export const SearchPage: React.FC = () => {
       countryId: 'united-kingdom',
       level: 'master',
       field: 'business',
+      courses: ['Master of Business Administration (MBA)', 'Business Administration'],
       tuition: 'Â£71,000 / year',
       duration: '12 Months',
       ielts: '7.5',
@@ -168,7 +267,8 @@ export const SearchPage: React.FC = () => {
       country: 'Canada',
       countryId: 'canada',
       level: 'bachelor',
-      field: 'tech-ai',
+      field: 'cs-it',
+      courses: ['Computer Science'],
       tuition: '$48,000 CAD / year',
       duration: '4 Years',
       ielts: '6.5',
@@ -181,6 +281,7 @@ export const SearchPage: React.FC = () => {
       countryId: 'germany',
       level: 'master',
       field: 'engineering',
+      courses: ['Mechanical Engineering', 'Robotics Engineering'],
       tuition: 'â‚¬0 (Tuition Free)',
       duration: '2 Years',
       ielts: '6.5',
@@ -196,16 +297,20 @@ export const SearchPage: React.FC = () => {
       const matchCountry = selectedCountry ? prog.countryId === selectedCountry : true
       const matchLevel = selectedLevel ? prog.level === selectedLevel : true
       const matchField = selectedField ? prog.field === selectedField : true
+      const matchCourse = selectedCourses.length > 0 
+        ? (prog.courses && prog.courses.some(c => selectedCourses.includes(c))) 
+        : true
 
-      return matchSearch && matchCountry && matchLevel && matchField
+      return matchSearch && matchCountry && matchLevel && matchField && matchCourse
     })
-  }, [searchTerm, selectedCountry, selectedLevel, selectedField])
+  }, [searchTerm, selectedCountry, selectedLevel, selectedField, selectedCourses])
 
   const handleResetFilters = () => {
     setSearchTerm('')
     setSelectedCountry('')
     setSelectedLevel('')
     setSelectedField('')
+    setSelectedCourses([])
   }
 
   return (
@@ -264,12 +369,40 @@ export const SearchPage: React.FC = () => {
             />
 
             {/* Field of Study */}
-            <GlassSelect
-              label="Field of Study"
-              options={fieldOptions}
-              value={selectedField}
-              onChange={setSelectedField}
-            />
+            <div className="flex flex-col gap-2">
+              <GlassSelect
+                label="Field of Study"
+                options={fieldOptions}
+                value={selectedField}
+                onChange={(val) => {
+                  setSelectedField(val)
+                  if (val && FIELD_COURSES[val]) {
+                    setActiveModalField(val)
+                    setIsCourseModalOpen(true)
+                    if (val !== activeModalField) {
+                      setSelectedCourses([])
+                    }
+                  } else {
+                    setSelectedCourses([])
+                  }
+                }}
+              />
+              {selectedCourses.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mt-1">
+                  {selectedCourses.map(course => (
+                    <div key={course} className="flex items-center gap-1.5 bg-primary/20 text-primary text-[11px] font-medium px-2 py-1 rounded-full border border-primary/30">
+                      <span>{course}</span>
+                      <button 
+                        onClick={() => setSelectedCourses(prev => prev.filter(c => c !== course))}
+                        className="hover:text-white transition-colors flex items-center justify-center bg-primary/20 hover:bg-primary/50 rounded-full p-0.5"
+                      >
+                        <span className="material-symbols-outlined text-[12px]">close</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </GlassCard>
         </aside>
 
@@ -328,6 +461,15 @@ export const SearchPage: React.FC = () => {
           )}
         </div>
       </div>
+
+      <CourseSelectionModal
+        isOpen={isCourseModalOpen}
+        onClose={() => setIsCourseModalOpen(false)}
+        fieldLabel={fieldOptions.find(f => f.value === activeModalField)?.label || ''}
+        courses={activeModalField ? FIELD_COURSES[activeModalField] : []}
+        initialSelectedCourses={selectedCourses}
+        onApply={(courses) => setSelectedCourses(courses)}
+      />
     </div>
   )
 }
