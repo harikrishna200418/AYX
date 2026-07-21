@@ -1,6 +1,9 @@
 import React from 'react'
+import { motion, type HTMLMotionProps } from 'framer-motion'
+import { Magnetic } from './Magnetic'
+import { cn } from '../../lib/utils'
 
-interface PillButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface PillButtonProps extends HTMLMotionProps<"button"> {
   variant?: 'primary' | 'secondary'
   className?: string
   children: React.ReactNode
@@ -12,19 +15,28 @@ export const PillButton: React.FC<PillButtonProps> = ({
   children,
   ...props
 }) => {
-  const baseStyles = 'font-headline text-label-md px-8 py-4 rounded-full transition-all duration-300 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]'
+  const baseStyles = 'relative overflow-hidden font-headline text-label-md px-8 py-4 rounded-full transition-all duration-300 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none'
   
   const variantStyles = variant === 'primary' 
-    ? 'bg-gradient-to-r from-[#ff6b6b] to-[#ff8e53] text-white border-none shadow-[0_4px_15px_rgba(255,107,107,0.4)] hover:shadow-[0_6px_20px_rgba(255,107,107,0.6)] hover:-translate-y-[2px]' 
-    : 'bg-white/30 backdrop-blur-[10px] border border-secondary text-secondary hover:bg-white/50 hover:-translate-y-[1px]'
+    ? 'bg-primary-button text-white shadow-glow-primary hover:shadow-[0_0_30px_rgba(11,17,33,0.5)]' 
+    : 'glass-panel text-secondary hover:text-white hover:bg-secondary border border-secondary/30'
 
   return (
-    <button
-      className={`${baseStyles} ${variantStyles} ${className}`}
-      {...props}
-    >
-      {children}
-    </button>
+    <Magnetic intensity={0.2}>
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className={cn(baseStyles, variantStyles, className, "group")}
+        {...props}
+      >
+        <span className="relative z-10 flex items-center justify-center gap-2">
+          {children}
+        </span>
+        {variant === 'primary' && (
+          <div className="absolute inset-0 -z-0 bg-secondary-button opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-[5px]" />
+        )}
+      </motion.button>
+    </Magnetic>
   )
 }
 export default PillButton

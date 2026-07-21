@@ -33,7 +33,7 @@ export const SearchPage: React.FC = () => {
       countryId: 'united-kingdom',
       level: 'master',
       field: 'tech-ai',
-      tuition: '£36,000 / year',
+      tuition: 'Â£36,000 / year',
       duration: '12 Months',
       ielts: '7.5',
     },
@@ -45,7 +45,7 @@ export const SearchPage: React.FC = () => {
       countryId: 'united-kingdom',
       level: 'master',
       field: 'tech-ai',
-      tuition: '£38,500 / year',
+      tuition: 'Â£38,500 / year',
       duration: '11 Months',
       ielts: '7.5',
     },
@@ -81,7 +81,7 @@ export const SearchPage: React.FC = () => {
       countryId: 'united-kingdom',
       level: 'master',
       field: 'business',
-      tuition: '£71,000 / year',
+      tuition: 'Â£71,000 / year',
       duration: '12 Months',
       ielts: '7.5',
     },
@@ -105,7 +105,7 @@ export const SearchPage: React.FC = () => {
       countryId: 'germany',
       level: 'master',
       field: 'engineering',
-      tuition: '€0 (Tuition Free)',
+      tuition: 'â‚¬0 (Tuition Free)',
       duration: '2 Years',
       ielts: '6.5',
     },
@@ -158,7 +158,7 @@ export const SearchPage: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Filters Panel */}
         <aside className="lg:col-span-3 flex flex-col gap-6">
-          <GlassCard hoverable={false} className="p-6 flex flex-col gap-5 border border-white/40">
+          <GlassCard hoverable={false} className="p-6 flex flex-col gap-5">
             <div className="flex justify-between items-center pb-2 border-b border-white/20">
               <h3 className="font-headline text-label-md text-primary font-bold uppercase tracking-wider">
                 Filters
@@ -227,7 +227,7 @@ export const SearchPage: React.FC = () => {
           </div>
 
           {filteredPrograms.length === 0 ? (
-            <div className="text-center py-20 bg-white/20 rounded-2xl border border-white/20 p-8">
+            <div className="text-center py-20 glass-panel rounded-2xl p-8">
               <span className="material-symbols-outlined text-primary text-5xl mb-4">search_off</span>
               <h3 className="text-headline-md text-primary font-bold mb-2">No Programs Found</h3>
               <p className="text-body-md text-on-surface-variant">Try refining your search terms or filter configurations.</p>
