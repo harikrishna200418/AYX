@@ -4,6 +4,7 @@ import { cn } from '../../lib/utils'
 
 interface GlassCardProps extends HTMLMotionProps<"div"> {
   hoverable?: boolean
+  overflowHidden?: boolean
   className?: string
   children: React.ReactNode
   delay?: number
@@ -11,6 +12,7 @@ interface GlassCardProps extends HTMLMotionProps<"div"> {
 
 export const GlassCard: React.FC<GlassCardProps> = ({
   hoverable = true,
+  overflowHidden = true,
   className = '',
   children,
   delay = 0,
@@ -22,9 +24,10 @@ export const GlassCard: React.FC<GlassCardProps> = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.8, delay: delay, ease: [0.16, 1, 0.3, 1] }}
-      whileHover={hoverable ? { y: -10, scale: 1.02 } : {}}
+      whileHover={hoverable ? { y: -4, scale: 1.01 } : {}}
       className={cn(
-        "relative overflow-hidden rounded-2xl glass-panel shadow-glass transition-colors duration-500",
+        "relative rounded-2xl glass-panel shadow-glass transition-colors duration-500",
+        overflowHidden && "overflow-hidden",
         hoverable && "hover:bg-white/50 hover:shadow-glass-hover cursor-pointer group",
         className
       )}
