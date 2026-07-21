@@ -4,6 +4,14 @@ import { useCourses } from '../hooks/useDataHooks'
 import { GlassCard } from '../components/ui/GlassCard'
 import { PillButton } from '../components/ui/PillButton'
 
+const categoryLabels: Record<string, string> = {
+  'ai-tech': 'AI & Tech',
+  languages: 'Language',
+  'career-dev': 'Career Dev',
+  'study-abroad': 'Study Abroad',
+  'overseas-success': 'Overseas Success',
+}
+
 export const MyLearningPage: React.FC = () => {
   const { courses, loading } = useCourses()
   const navigate = useNavigate()
@@ -74,7 +82,7 @@ export const MyLearningPage: React.FC = () => {
                   {/* Category & Status */}
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-[10px] font-headline font-bold uppercase tracking-wider text-secondary bg-secondary/10 px-2.5 py-0.5 rounded-full">
-                      {course.category === 'ai-tech' ? 'AI & Tech' : course.category === 'languages' ? 'Language' : course.category === 'career-dev' ? 'Career Dev' : 'Study Prep'}
+                      {categoryLabels[course.category] ?? 'Academy'}
                     </span>
                     
                     <span className={`font-bold font-headline ${course.progress === 100 ? 'text-green-600' : 'text-secondary'}`}>
