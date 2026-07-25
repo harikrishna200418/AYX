@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   ArrowRight,
+  Award,
   BriefcaseBusiness,
   Building2,
   CheckCircle2,
@@ -13,7 +14,9 @@ import {
   Rocket,
   Sparkles,
   Target,
+  TrendingUp,
   Users,
+  Video,
 } from 'lucide-react'
 import { useCourses } from '../hooks/useDataHooks'
 import { GlassCard } from '../components/ui/GlassCard'
@@ -38,6 +41,9 @@ const divisions: Array<{
   description: string
   icon: React.ElementType
   tracks: string[]
+  courseCount: number
+  level: string
+  duration: string
 }> = [
   {
     id: 'study-abroad',
@@ -46,6 +52,9 @@ const divisions: Array<{
     description: 'Exam-focused coaching and Germany pathway support for students preparing for global admissions.',
     icon: Globe2,
     tracks: ['IELTS', 'PTE', 'TOEFL', 'GRE', 'GMAT', 'Duolingo English Test', 'German TestAS', 'APS Germany Guidance'],
+    courseCount: 8,
+    level: 'Beginner to Advanced',
+    duration: '140 hrs',
   },
   {
     id: 'ai-tech',
@@ -54,6 +63,9 @@ const divisions: Array<{
     description: 'Practical AI, productivity, design, analytics, and Python programmes for learners and working teams.',
     icon: Laptop,
     tracks: ['AI Tools', 'Prompt Engineering', 'AI for Business', 'AI for Students', 'Canva & AI Design', 'Microsoft Office with AI', 'Data Analytics', 'Python Fundamentals'],
+    courseCount: 8,
+    level: 'Beginner to Advanced',
+    duration: '120 hrs',
   },
   {
     id: 'languages',
@@ -62,6 +74,9 @@ const divisions: Array<{
     description: 'Language fluency tracks for international education, workplace confidence, and client-facing careers.',
     icon: Languages,
     tracks: ['German', 'French', 'Japanese', 'Spoken English', 'Business English'],
+    courseCount: 5,
+    level: 'Beginner to Advanced',
+    duration: '100 hrs',
   },
   {
     id: 'career-dev',
@@ -70,6 +85,9 @@ const divisions: Array<{
     description: 'Career documents, personal branding, communication, and interview readiness for global roles.',
     icon: BriefcaseBusiness,
     tracks: ['Resume Building', 'LinkedIn Branding', 'SOP & LOR Writing', 'Interview Skills', 'Communication Skills', 'Presentation Skills'],
+    courseCount: 6,
+    level: 'Beginner to Advanced',
+    duration: '60 hrs',
   },
   {
     id: 'overseas-success',
@@ -78,6 +96,9 @@ const divisions: Array<{
     description: 'End-to-end mentoring from counselling to visa readiness, internships, and pre-departure planning.',
     icon: Map,
     tracks: ['University Counselling', 'Scholarship Guidance', 'Visa Preparation', 'Internship Assistance', 'Career Planning', 'Pre-departure Orientation'],
+    courseCount: 6,
+    level: 'Guided Mentoring',
+    duration: 'Ongoing support',
   },
 ]
 
@@ -107,6 +128,39 @@ const futureExpansion = [
   'Corporate Training Division',
   'Government Skill Development Projects',
   'International Certification Centre',
+]
+
+const whyAcademy = [
+  {
+    icon: Building2,
+    title: 'Industry-Aligned Curriculum',
+    description: 'Every track is built around what universities and employers actually screen for — not generic theory.',
+  },
+  {
+    icon: Video,
+    title: 'Live Interactive Classes',
+    description: 'Learn from faculty in real time, with room to ask, practice, and get corrected on the spot.',
+  },
+  {
+    icon: TrendingUp,
+    title: 'Career-Focused Outcomes',
+    description: 'Every division ties back to an outcome — an admit, a score, a job, or a completed transition abroad.',
+  },
+  {
+    icon: Sparkles,
+    title: 'AI-Powered Learning',
+    description: 'AI tools and workflows are built into how you learn, not just what you learn about.',
+  },
+  {
+    icon: Award,
+    title: 'Recognized Certifications',
+    description: 'Finish with credentials that hold weight with universities, recruiters, and visa officers alike.',
+  },
+  {
+    icon: Globe2,
+    title: 'Global Opportunities',
+    description: 'From test prep to visa readiness, every track points toward a real international pathway.',
+  },
 ]
 
 export const AcademyPage: React.FC = () => {
@@ -144,48 +198,172 @@ export const AcademyPage: React.FC = () => {
 
   return (
     <div className="px-margin-mobile md:px-margin-desktop py-8 md:py-12 flex flex-col gap-14 max-w-container-max mx-auto">
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        <div className="lg:col-span-7 space-y-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-secondary/20 bg-white/50 px-4 py-2 text-xs font-headline font-bold uppercase tracking-wider text-secondary">
-            <Sparkles className="h-4 w-4" />
-            AYXVIBE Academy
-          </div>
-
-          <div className="space-y-4">
-            <h1 className="text-headline-lg md:text-display-lg text-primary font-bold">
-              Empowering Skills. Enabling Global Careers.
-            </h1>
-            <p className="text-body-lg text-on-surface-variant max-w-2xl">
-              A unified academy for study abroad exams, AI skills, languages, career development, and overseas success mentoring.
-            </p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-3">
-            <PillButton variant="primary" className="!px-6 !py-3" onClick={() => navigate('/onboarding/path')}>
-              <span className="inline-flex items-center gap-2">
-                Start Counselling <ArrowRight className="h-4 w-4" />
-              </span>
-            </PillButton>
-            <PillButton variant="secondary" className="!px-6 !py-3" onClick={() => setActiveCategory('all')}>
-              Explore Courses
-            </PillButton>
-          </div>
+      <section className="max-w-3xl space-y-5">
+        <div className="inline-flex items-center gap-2 rounded-full border border-secondary/20 bg-white/50 px-4 py-2 text-xs font-headline font-bold uppercase tracking-wider text-secondary">
+          <Sparkles className="h-4 w-4" />
+          AYXVIBE Academy
         </div>
 
-        <div className="lg:col-span-5 grid grid-cols-2 gap-4">
-          {[
-            { value: '5', label: 'Training divisions' },
-            { value: '34+', label: 'Skill tracks' },
-            { value: '7', label: 'Audience segments' },
-            { value: '360', label: 'Career pathway support' },
-          ].map((stat) => (
-            <GlassCard key={stat.label} hoverable={false} className="p-5 border border-white/40">
-              <div className="text-stats-xl text-secondary mb-2">{stat.value}</div>
-              <div className="text-xs font-headline font-bold uppercase tracking-wider text-on-surface-variant">
-                {stat.label}
+        <div className="space-y-3">
+          <h1 className="text-headline-md md:text-headline-lg text-primary font-bold">
+            Empowering Skills. Enabling Global Careers.
+          </h1>
+          <p className="text-body-md md:text-body-lg text-on-surface-variant max-w-2xl">
+            A unified academy for study abroad exams, AI skills, languages, career development, and overseas success mentoring.
+          </p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-3">
+          <PillButton variant="primary" className="!px-6 !py-3" onClick={() => navigate('/onboarding/path')}>
+            <span className="inline-flex items-center gap-2">
+              Start Counselling <ArrowRight className="h-4 w-4" />
+            </span>
+          </PillButton>
+          <PillButton variant="secondary" className="!px-6 !py-3" onClick={() => setActiveCategory('all')}>
+            Explore Courses
+          </PillButton>
+        </div>
+      </section>
+
+      <section className="space-y-6">
+        <div className="max-w-2xl">
+          <h2 className="text-headline-md text-primary font-bold">Why AYXVIBE Academy</h2>
+          <p className="text-body-md text-on-surface-variant mt-2">
+            Built for outcomes, not just attendance.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {whyAcademy.map((item) => {
+            const Icon = item.icon
+            return (
+              <GlassCard key={item.title} hoverable={false} className="p-6 border border-white/40">
+                <div className="h-10 w-10 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center mb-4">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <h3 className="text-body-lg font-headline font-bold text-primary mb-1.5">{item.title}</h3>
+                <p className="text-sm text-on-surface-variant leading-relaxed">{item.description}</p>
+              </GlassCard>
+            )
+          })}
+        </div>
+      </section>
+
+      {/* FEATURED SPOTLIGHT SECTION (from Image 1) */}
+      <section className="space-y-6">
+        <div className="max-w-2xl">
+          <h2 className="text-headline-md text-primary font-bold">Featured Spotlight</h2>
+          <p className="text-body-md text-on-surface-variant mt-2">
+            Flagship specialization tracks designed with leading global institutions.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Main Large Featured Card */}
+          <div className="lg:col-span-7 flex flex-col">
+            <GlassCard hoverable={false} className="p-0 overflow-hidden flex flex-col justify-between h-full border border-white/40 shadow-glass rounded-2xl relative bg-white/40 backdrop-blur-xl">
+              <div className="relative h-60 md:h-64 w-full overflow-hidden bg-slate-900">
+                <div className="absolute top-4 left-4 z-20 inline-flex items-center gap-1.5 rounded-full bg-secondary px-3.5 py-1.5 text-xs font-headline font-extrabold uppercase tracking-wider text-white shadow-md">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  New Release
+                </div>
+                <img
+                  src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80"
+                  alt="AI Leadership & Global Strategy"
+                  className="w-full h-full object-cover opacity-90 transition-transform duration-500 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
+              </div>
+
+              <div className="p-6 md:p-8 space-y-4 flex-1 flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div className="text-xs font-headline font-bold text-secondary uppercase tracking-wider flex items-center gap-2">
+                    <span>12 Weeks</span>
+                    <span>•</span>
+                    <span>Certified Expert</span>
+                  </div>
+                  <h3 className="font-headline text-headline-sm md:text-headline-md font-bold text-primary">
+                    Prompt Engineering & AI Workflows
+                  </h3>
+                  <p className="text-body-md text-on-surface-variant leading-relaxed">
+                    Strategic implementation of generative AI, prompt engineering, and automated workflows for multinational organizations and cross-border startups.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between pt-4 border-t border-white/20">
+                  <div className="flex items-center gap-3">
+                    <div className="flex -space-x-2 overflow-hidden">
+                      <img className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Student" />
+                      <img className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80" alt="Student" />
+                      <img className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80" alt="Student" />
+                    </div>
+                    <span className="text-xs font-headline font-bold text-secondary bg-secondary/10 px-2.5 py-1 rounded-full">
+                      +4.2k enrolled
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={() => handleEnroll('prompt-eng')}
+                    className="h-11 w-11 rounded-full bg-secondary text-white flex items-center justify-center shadow-md hover:bg-secondary/90 transition-all hover:scale-105"
+                    title="Enroll Now"
+                  >
+                    <ArrowRight className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
             </GlassCard>
-          ))}
+          </div>
+
+          {/* Right Two Smaller Highlight Cards */}
+          <div className="lg:col-span-5 flex flex-col gap-6 justify-between">
+            <GlassCard hoverable={true} className="p-5 border border-white/40 flex flex-col sm:flex-row items-center sm:items-start gap-4 flex-1">
+              <img
+                src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=400&q=80"
+                alt="Language Mastery"
+                className="w-full sm:w-28 h-28 rounded-2xl object-cover shrink-0 shadow-sm"
+              />
+              <div className="flex-1 space-y-2 text-center sm:text-left">
+                <h3 className="font-headline text-body-lg font-bold text-primary">
+                  German Language & TestAS Readiness
+                </h3>
+                <p className="text-xs text-on-surface-variant line-clamp-2 leading-relaxed">
+                  Master professional German for global university admits, APS documentation, and workplace fluency.
+                </p>
+                <div className="flex flex-wrap justify-center sm:justify-start gap-2 pt-1">
+                  <span className="bg-secondary/10 text-secondary text-[11px] font-headline font-bold px-2.5 py-1 rounded-full">
+                    8-Week Intensive
+                  </span>
+                  <span className="bg-white/60 border border-white/40 text-on-surface-variant text-[11px] font-headline font-bold px-2.5 py-1 rounded-full">
+                    Level B2-C1
+                  </span>
+                </div>
+              </div>
+            </GlassCard>
+
+            <GlassCard hoverable={true} className="p-5 border border-white/40 flex flex-col sm:flex-row items-center sm:items-start gap-4 flex-1">
+              <img
+                src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=400&q=80"
+                alt="Career Development"
+                className="w-full sm:w-28 h-28 rounded-2xl object-cover shrink-0 shadow-sm"
+              />
+              <div className="flex-1 space-y-2 text-center sm:text-left">
+                <h3 className="font-headline text-body-lg font-bold text-primary">
+                  Resume, LinkedIn & Interview Blueprint
+                </h3>
+                <p className="text-xs text-on-surface-variant line-clamp-2 leading-relaxed">
+                  Create ATS-friendly resumes, optimize LinkedIn branding, and master executive interview readiness.
+                </p>
+                <div className="flex flex-wrap justify-center sm:justify-start gap-2 pt-1">
+                  <span className="bg-secondary/10 text-secondary text-[11px] font-headline font-bold px-2.5 py-1 rounded-full">
+                    Self-Paced
+                  </span>
+                  <span className="bg-white/60 border border-white/40 text-on-surface-variant text-[11px] font-headline font-bold px-2.5 py-1 rounded-full">
+                    Beginner to Pro
+                  </span>
+                </div>
+              </div>
+            </GlassCard>
+          </div>
         </div>
       </section>
 
@@ -230,6 +408,20 @@ export const AcademyPage: React.FC = () => {
                 <h3 className="text-headline-md text-primary font-bold">{activeDivisionData.title}</h3>
                 <p className="text-body-md text-on-surface-variant mt-2">{activeDivisionData.description}</p>
               </div>
+
+              <div className="flex flex-wrap gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/10 text-secondary px-3 py-1.5 text-xs font-headline font-bold">
+                  <GraduationCap className="h-3.5 w-3.5" />
+                  {activeDivisionData.courseCount} Courses
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-tertiary/10 text-tertiary px-3 py-1.5 text-xs font-headline font-bold">
+                  <Target className="h-3.5 w-3.5" />
+                  {activeDivisionData.level}
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/60 border border-white/50 text-on-surface-variant px-3 py-1.5 text-xs font-headline font-bold">
+                  {activeDivisionData.duration}
+                </span>
+              </div>
             </div>
 
             <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
@@ -247,68 +439,78 @@ export const AcademyPage: React.FC = () => {
         </GlassCard>
       </section>
 
+      {/* COURSE CATALOG CARD REDESIGN (from Image 2) */}
       <section className="space-y-6">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h2 className="text-headline-md text-primary font-bold">Academy Courses</h2>
-            <p className="text-body-md text-on-surface-variant mt-2">
-              Featured programmes shaped around the academy divisions.
+            <h2 className="text-headline-md text-primary font-bold">Featured Course Catalog</h2>
+            <p className="text-body-md text-on-surface-variant mt-1">
+              Skill up with our most popular professional programs.
             </p>
           </div>
-          <div className="w-full overflow-x-auto pb-2 lg:w-auto">
-            <GlassTabs tabs={tabs} activeTab={activeCategory} onChange={setActiveCategory} />
-          </div>
+
+          <button
+            onClick={() => setActiveCategory('all')}
+            className="inline-flex items-center gap-1.5 text-sm font-headline font-bold text-secondary hover:text-primary transition-colors self-start md:self-auto"
+          >
+            View All Courses <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="w-full overflow-x-auto pb-2">
+          <GlassTabs tabs={tabs} activeTab={activeCategory} onChange={setActiveCategory} />
         </div>
 
         {loading ? (
           <div className="text-center py-20 text-body-lg text-on-surface-variant">Loading courses...</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredCourses.map((course) => (
-              <GlassCard key={course.id} hoverable={true} className="p-6 flex flex-col justify-between select-none h-full border border-white/40">
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center gap-3">
-                    <span className="text-[10px] font-headline font-bold uppercase tracking-wider text-secondary bg-secondary/10 px-2.5 py-1 rounded-full">
+              <GlassCard key={course.id} hoverable={true} className="p-0 overflow-hidden flex flex-col justify-between h-full border border-white/40 select-none">
+                <div className="relative h-44 w-full overflow-hidden bg-slate-100">
+                  <img
+                    src={course.imageUrl ?? 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80'}
+                    alt={course.title}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                  />
+                </div>
+
+                <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                  <div className="space-y-2.5">
+                    <span className="text-[10px] font-headline font-bold uppercase tracking-wider text-secondary bg-secondary/10 px-2.5 py-1 rounded-full inline-block">
                       {categoryLabels[course.category] ?? 'Academy'}
                     </span>
 
-                    <div className="flex items-center gap-1 text-xs text-secondary font-bold">
-                      <Sparkles className="h-4 w-4 text-amber-500" />
-                      {course.rating}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="font-headline text-[18px] md:text-[20px] font-bold text-primary leading-snug">
+                    <h3 className="font-headline text-body-lg font-bold text-primary leading-snug line-clamp-2">
                       {course.title}
                     </h3>
-                    <span className="text-xs text-on-surface-variant mt-1.5 block">
-                      Faculty: <span className="font-bold text-primary">{course.instructor}</span>
-                    </span>
+
+                    <div className="flex items-center gap-1.5 text-xs text-on-surface-variant">
+                      <Sparkles className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />
+                      <span className="font-bold text-primary">{course.rating}</span>
+                      <span>({course.studentsCount ?? '2.4k'} students)</span>
+                    </div>
+
+                    <div className="flex items-center gap-2 pt-1">
+                      <img
+                        src={course.instructorAvatar ?? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80'}
+                        alt={course.instructor}
+                        className="w-6 h-6 rounded-full object-cover border border-white/40 shrink-0"
+                      />
+                      <span className="text-xs font-headline font-medium text-on-surface-variant truncate">
+                        {course.instructor}
+                      </span>
+                    </div>
                   </div>
 
-                  <p className="text-sm text-on-surface-variant leading-relaxed">{course.description}</p>
-
-                  <div className="flex items-center gap-4 text-xs text-on-surface-variant border-t border-white/20 pt-4">
-                    <div className="flex items-center gap-1.5">
-                      <Target className="h-4 w-4 text-outline" />
-                      {course.duration}
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <GraduationCap className="h-4 w-4 text-outline" />
-                      {course.lessons} Lessons
-                    </div>
+                  <div className="pt-2">
+                    <button
+                      onClick={() => handleEnroll(course.id)}
+                      className="w-full py-2.5 px-4 rounded-full border border-secondary text-secondary font-headline text-xs font-bold hover:bg-secondary hover:text-white transition-all shadow-sm"
+                    >
+                      {course.enrolled && isAuthenticated ? 'Go to Classroom' : 'Enroll Now'}
+                    </button>
                   </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-white/10">
-                  <PillButton
-                    variant={course.enrolled ? 'secondary' : 'primary'}
-                    className="w-full !py-2.5 text-xs"
-                    onClick={() => handleEnroll(course.id)}
-                  >
-                    {course.enrolled && isAuthenticated ? 'Go to Classroom' : 'Enroll in Academy'}
-                  </PillButton>
                 </div>
               </GlassCard>
             ))}
@@ -374,6 +576,80 @@ export const AcademyPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Academy Footer (from Image 3) */}
+      <footer className="mt-8 pt-10 pb-6 border-t border-white/30 space-y-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
+          {/* Brand & Tagline */}
+          <div className="lg:col-span-4 space-y-4">
+            <div className="font-headline text-headline-md font-black tracking-tighter text-primary">
+              AYXVIBE
+            </div>
+            <p className="text-body-md text-on-surface-variant max-w-sm leading-relaxed">
+              Empowering the next generation of global citizens through curated education and career acceleration.
+            </p>
+          </div>
+
+          {/* Programs Column */}
+          <div className="lg:col-span-3 space-y-3">
+            <h4 className="font-headline text-xs font-bold uppercase tracking-wider text-secondary">
+              Programs
+            </h4>
+            <ul className="space-y-2 text-sm text-on-surface-variant font-headline">
+              <li><button onClick={() => setActiveDivision('study-abroad')} className="hover:text-secondary transition-colors text-left">Study Abroad</button></li>
+              <li><button onClick={() => setActiveDivision('ai-tech')} className="hover:text-secondary transition-colors text-left">AI & Tech</button></li>
+              <li><button onClick={() => setActiveDivision('languages')} className="hover:text-secondary transition-colors text-left">Language Academy</button></li>
+              <li><button onClick={() => setActiveDivision('overseas-success')} className="hover:text-secondary transition-colors text-left">Success Programme</button></li>
+            </ul>
+          </div>
+
+          {/* Resources Column */}
+          <div className="lg:col-span-2 space-y-3">
+            <h4 className="font-headline text-xs font-bold uppercase tracking-wider text-secondary">
+              Resources
+            </h4>
+            <ul className="space-y-2 text-sm text-on-surface-variant font-headline">
+              <li><button onClick={() => setActiveDivision('career-dev')} className="hover:text-secondary transition-colors text-left">Career Centre</button></li>
+              <li><button onClick={() => navigate('/onboarding/path')} className="hover:text-secondary transition-colors text-left">Build My Pathway</button></li>
+              <li><button onClick={() => navigate('/login')} className="hover:text-secondary transition-colors text-left">Academy Admissions</button></li>
+            </ul>
+          </div>
+
+          {/* Newsletter Column */}
+          <div className="lg:col-span-3 space-y-3">
+            <h4 className="font-headline text-xs font-bold uppercase tracking-wider text-secondary">
+              Newsletter
+            </h4>
+            <p className="text-xs text-on-surface-variant">
+              Stay updated with global opportunities.
+            </p>
+            <form onSubmit={(e) => e.preventDefault()} className="flex items-center gap-2 rounded-full bg-white/70 border border-white/50 p-1.5 shadow-sm">
+              <input
+                type="email"
+                placeholder="Email address"
+                className="bg-transparent px-3 py-1.5 text-xs text-primary placeholder:text-on-surface-variant/60 focus:outline-none w-full"
+              />
+              <button
+                type="submit"
+                className="h-8 w-8 rounded-full bg-secondary text-white flex items-center justify-center shrink-0 hover:bg-secondary/90 transition-all shadow-sm"
+              >
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Legal & Copyright */}
+        <div className="pt-6 border-t border-white/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-on-surface-variant">
+          <div>
+            © {new Date().getFullYear()} AYXVIBE Academy. Empowering Global Careers.
+          </div>
+          <div className="flex gap-6">
+            <a href="#" className="hover:text-secondary transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-secondary transition-colors">Terms of Service</a>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
