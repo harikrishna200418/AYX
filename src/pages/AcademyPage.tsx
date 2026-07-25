@@ -23,7 +23,7 @@ import { GlassCard } from '../components/ui/GlassCard'
 import { GlassTabs } from '../components/ui/GlassTabs'
 import { PillButton } from '../components/ui/PillButton'
 import { CourseDetailModal } from '../components/ui/CourseDetailModal'
-import { Course } from '../data/mockData'
+import type { Course } from '../data/mockData'
 import { useAuthStore } from '../store/authStore'
 
 type AcademyDivisionId = 'study-abroad' | 'ai-tech' | 'languages' | 'career-dev' | 'overseas-success'

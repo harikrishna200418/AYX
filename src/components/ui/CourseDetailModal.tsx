@@ -12,7 +12,7 @@ import {
   Award,
   ArrowRight,
 } from 'lucide-react'
-import { Course } from '../../data/mockData'
+import type { Course } from '../../data/mockData'
 import { PillButton } from './PillButton'
 
 interface CourseDetailModalProps {
