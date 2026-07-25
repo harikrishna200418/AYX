@@ -22,6 +22,8 @@ import { useCourses } from '../hooks/useDataHooks'
 import { GlassCard } from '../components/ui/GlassCard'
 import { GlassTabs } from '../components/ui/GlassTabs'
 import { PillButton } from '../components/ui/PillButton'
+import { CourseDetailModal } from '../components/ui/CourseDetailModal'
+import type { Course } from '../data/mockData'
 import { useAuthStore } from '../store/authStore'
 
 type AcademyDivisionId = 'study-abroad' | 'ai-tech' | 'languages' | 'career-dev' | 'overseas-success'
@@ -169,6 +171,22 @@ export const AcademyPage: React.FC = () => {
   const navigate = useNavigate()
   const [activeCategory, setActiveCategory] = useState<string>('all')
   const [activeDivision, setActiveDivision] = useState<AcademyDivisionId>('study-abroad')
+  const [selectedCourseModal, setSelectedCourseModal] = useState<Course | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+
+  const handleOpenCourseDetails = (course: Course) => {
+    setSelectedCourseModal(course)
+    setIsModalOpen(true)
+  }
+
+  const handleOpenCourseById = (courseId: string) => {
+    const found = courses.find((c) => c.id === courseId)
+    if (found) {
+      handleOpenCourseDetails(found)
+    } else {
+      handleEnroll(courseId)
+    }
+  }
 
   const tabs = [
     { id: 'all', label: 'All' },
@@ -303,9 +321,9 @@ export const AcademyPage: React.FC = () => {
                   </div>
 
                   <button
-                    onClick={() => handleEnroll('prompt-eng')}
+                    onClick={() => handleOpenCourseById('prompt-eng')}
                     className="h-11 w-11 rounded-full bg-secondary text-white flex items-center justify-center shadow-md hover:bg-secondary/90 transition-all hover:scale-105"
-                    title="Enroll Now"
+                    title="View Syllabus & Enroll"
                   >
                     <ArrowRight className="h-5 w-5" />
                   </button>
@@ -316,14 +334,18 @@ export const AcademyPage: React.FC = () => {
 
           {/* Right Two Smaller Highlight Cards */}
           <div className="lg:col-span-5 flex flex-col gap-6 justify-between">
-            <GlassCard hoverable={true} className="p-5 border border-white/40 flex flex-col sm:flex-row items-center sm:items-start gap-4 flex-1">
+            <GlassCard
+              hoverable={true}
+              onClick={() => handleOpenCourseById('german-a1')}
+              className="p-5 border border-white/40 flex flex-col sm:flex-row items-center sm:items-start gap-4 flex-1 cursor-pointer group"
+            >
               <img
                 src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=400&q=80"
                 alt="Language Mastery"
-                className="w-full sm:w-28 h-28 rounded-2xl object-cover shrink-0 shadow-sm"
+                className="w-full sm:w-28 h-28 rounded-2xl object-cover shrink-0 shadow-sm transition-transform duration-300 group-hover:scale-105"
               />
               <div className="flex-1 space-y-2 text-center sm:text-left">
-                <h3 className="font-headline text-body-lg font-bold text-primary">
+                <h3 className="font-headline text-body-lg font-bold text-primary group-hover:text-secondary transition-colors">
                   German Language & TestAS Readiness
                 </h3>
                 <p className="text-xs text-on-surface-variant line-clamp-2 leading-relaxed">
@@ -340,14 +362,18 @@ export const AcademyPage: React.FC = () => {
               </div>
             </GlassCard>
 
-            <GlassCard hoverable={true} className="p-5 border border-white/40 flex flex-col sm:flex-row items-center sm:items-start gap-4 flex-1">
+            <GlassCard
+              hoverable={true}
+              onClick={() => handleOpenCourseById('resume-mastery')}
+              className="p-5 border border-white/40 flex flex-col sm:flex-row items-center sm:items-start gap-4 flex-1 cursor-pointer group"
+            >
               <img
                 src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=400&q=80"
                 alt="Career Development"
-                className="w-full sm:w-28 h-28 rounded-2xl object-cover shrink-0 shadow-sm"
+                className="w-full sm:w-28 h-28 rounded-2xl object-cover shrink-0 shadow-sm transition-transform duration-300 group-hover:scale-105"
               />
               <div className="flex-1 space-y-2 text-center sm:text-left">
-                <h3 className="font-headline text-body-lg font-bold text-primary">
+                <h3 className="font-headline text-body-lg font-bold text-primary group-hover:text-secondary transition-colors">
                   Resume, LinkedIn & Interview Blueprint
                 </h3>
                 <p className="text-xs text-on-surface-variant line-clamp-2 leading-relaxed">
@@ -466,13 +492,23 @@ export const AcademyPage: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredCourses.map((course) => (
-              <GlassCard key={course.id} hoverable={true} className="p-0 overflow-hidden flex flex-col justify-between h-full border border-white/40 select-none">
+              <GlassCard
+                key={course.id}
+                hoverable={true}
+                onClick={() => handleOpenCourseDetails(course)}
+                className="p-0 overflow-hidden flex flex-col justify-between h-full border border-white/40 select-none cursor-pointer group"
+              >
                 <div className="relative h-44 w-full overflow-hidden bg-slate-100">
                   <img
                     src={course.imageUrl ?? 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80'}
                     alt={course.title}
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
+                  <div className="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span className="bg-white/90 backdrop-blur-md text-primary font-headline text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+                      View Syllabus
+                    </span>
+                  </div>
                 </div>
 
                 <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
@@ -481,7 +517,7 @@ export const AcademyPage: React.FC = () => {
                       {categoryLabels[course.category] ?? 'Academy'}
                     </span>
 
-                    <h3 className="font-headline text-body-lg font-bold text-primary leading-snug line-clamp-2">
+                    <h3 className="font-headline text-body-lg font-bold text-primary leading-snug line-clamp-2 group-hover:text-secondary transition-colors">
                       {course.title}
                     </h3>
 
@@ -505,10 +541,13 @@ export const AcademyPage: React.FC = () => {
 
                   <div className="pt-2">
                     <button
-                      onClick={() => handleEnroll(course.id)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleOpenCourseDetails(course)
+                      }}
                       className="w-full py-2.5 px-4 rounded-full border border-secondary text-secondary font-headline text-xs font-bold hover:bg-secondary hover:text-white transition-all shadow-sm"
                     >
-                      {course.enrolled && isAuthenticated ? 'Go to Classroom' : 'Enroll Now'}
+                      View Syllabus & Enroll
                     </button>
                   </div>
                 </div>
@@ -576,6 +615,15 @@ export const AcademyPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Course Detail Modal */}
+      <CourseDetailModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        course={selectedCourseModal}
+        onEnroll={handleEnroll}
+        isAuthenticated={isAuthenticated}
+      />
     </div>
   )
 }

@@ -25,6 +25,13 @@ export interface Destination {
   universities: University[]
 }
 
+export interface CourseModule {
+  id: string
+  title: string
+  duration: string
+  topics: string[]
+}
+
 export interface Course {
   id: string
   title: string
@@ -40,6 +47,10 @@ export interface Course {
   studentsCount?: string
   instructorAvatar?: string
   level?: string
+  instructorTitle?: string
+  prerequisites?: string[]
+  outcomes?: string[]
+  modules?: CourseModule[]
 }
 
 export interface TestPrep {
@@ -198,6 +209,7 @@ export const mockCourses: Course[] = [
     lessons: 12,
     rating: 4.8,
     instructor: 'Dr. Arpit Sharma',
+    instructorTitle: 'Principal AI Researcher & Ex-Googler',
     description: 'Use ChatGPT, Gemini, Copilot, and Claude to research, write, analyse, design, and automate everyday academic and business work.',
     enrolled: true,
     progress: 75,
@@ -205,6 +217,39 @@ export const mockCourses: Course[] = [
     studentsCount: '4.2k',
     instructorAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80',
     level: 'Certified Expert',
+    prerequisites: ['Basic computer literacy', 'Familiarity with web browsers'],
+    outcomes: [
+      'Master Zero-shot, Few-shot, and Chain-of-Thought prompting',
+      'Automate daily workflows with Custom GPTs and AI Agents',
+      'Integrate LLM APIs into business pipelines',
+      'Create high-converting content and technical documentation',
+    ],
+    modules: [
+      {
+        id: 'm1',
+        title: 'Module 1: Foundations of Generative AI & Prompt Architecture',
+        duration: '1 week (3 lessons)',
+        topics: ['LLM Architecture Demystified', 'Prompt Engineering Principles', 'Tokenization & Context Windows'],
+      },
+      {
+        id: 'm2',
+        title: 'Module 2: Advanced Reasoning & Chain-of-Thought Frameworks',
+        duration: '1 week (3 lessons)',
+        topics: ['Few-Shot & Multi-Turn Prompting', 'Structured JSON Output Generation', 'Hallucination Mitigation'],
+      },
+      {
+        id: 'm3',
+        title: 'Module 3: Autonomous AI Agents & Custom GPTs',
+        duration: '1 week (3 lessons)',
+        topics: ['Building Custom GPTs & Actions', 'Agentic Workflows with LangChain Basics', 'API Key Integration'],
+      },
+      {
+        id: 'm4',
+        title: 'Module 4: Enterprise Productivity & Case Studies',
+        duration: '1 week (3 lessons)',
+        topics: ['AI for Academic Research & Writing', 'Automating Marketing & Code Reviews', 'Capstone Project'],
+      },
+    ],
   },
   {
     id: 'data-analytics',
@@ -214,6 +259,7 @@ export const mockCourses: Course[] = [
     lessons: 24,
     rating: 4.7,
     instructor: 'Sarah Jenkins',
+    instructorTitle: 'Senior Data Scientist @ TechCorp',
     description: 'Build a practical foundation in spreadsheets, dashboards, Python basics, and data storytelling for students and professionals.',
     enrolled: true,
     progress: 40,
@@ -221,6 +267,39 @@ export const mockCourses: Course[] = [
     studentsCount: '1.8k',
     instructorAvatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=120&q=80',
     level: 'Intermediate',
+    prerequisites: ['Basic math & statistics background'],
+    outcomes: [
+      'Perform data wrangling with Pandas and NumPy',
+      'Create interactive dashboards in Tableau and PowerBI',
+      'Write clean Python scripts for automated data extraction',
+      'Present impactful visual data stories to executive stakeholders',
+    ],
+    modules: [
+      {
+        id: 'm1',
+        title: 'Module 1: Excel & SQL Fundamentals for Analytics',
+        duration: '2 weeks (6 lessons)',
+        topics: ['Advanced Excel Formulas & Pivot Tables', 'Relational Databases & SQL Queries', 'Data Cleaning Techniques'],
+      },
+      {
+        id: 'm2',
+        title: 'Module 2: Python Programming Basics',
+        duration: '2 weeks (6 lessons)',
+        topics: ['Data Structures, Loops & Functions', 'NumPy Arrays & Pandas DataFrames', 'Handling Missing Values'],
+      },
+      {
+        id: 'm3',
+        title: 'Module 3: Data Visualization & Storytelling',
+        duration: '2 weeks (6 lessons)',
+        topics: ['Matplotlib & Seaborn Libraries', 'Dashboard Design in PowerBI/Tableau', 'Communicating Insights'],
+      },
+      {
+        id: 'm4',
+        title: 'Module 4: Exploratory Data Analysis Capstone',
+        duration: '2 weeks (6 lessons)',
+        topics: ['Real-World E-commerce Dataset Analysis', 'Predictive Modeling Intro', 'Final Portfolio Presentation'],
+      },
+    ],
   },
   {
     id: 'german-a1',
@@ -230,6 +309,7 @@ export const mockCourses: Course[] = [
     lessons: 30,
     rating: 4.9,
     instructor: 'Hans Mueller',
+    instructorTitle: 'Goethe-Certified Native Language Faculty',
     description: 'Build German language confidence with guided pathways for TestAS, APS Germany documentation, and study-abroad readiness.',
     enrolled: false,
     progress: 0,
@@ -237,6 +317,33 @@ export const mockCourses: Course[] = [
     studentsCount: '950',
     instructorAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80',
     level: 'Level B2-C1',
+    prerequisites: ['No prior German language knowledge required'],
+    outcomes: [
+      'Master conversational German for daily life and academic settings',
+      'Pass TestAS core and subject-specific modules with top percentiles',
+      'Prepare flawless APS documentation for German university admissions',
+      'Understand German academic etiquette and student visa requirements',
+    ],
+    modules: [
+      {
+        id: 'm1',
+        title: 'Module 1: German A1 Phonetics & Basic Grammar',
+        duration: '2 weeks (10 lessons)',
+        topics: ['Alphabet, Numbers & Greetings', 'Nouns, Articles & Gender Rules', 'Present Tense Verb Conjugations'],
+      },
+      {
+        id: 'm2',
+        title: 'Module 2: Daily Life & Academic Vocabulary',
+        duration: '2 weeks (10 lessons)',
+        topics: ['University & Classroom Terminology', 'Shopping, Travel & Directions', 'Case System (Nominativ, Akkusativ, Dativ)'],
+      },
+      {
+        id: 'm3',
+        title: 'Module 3: TestAS Exam Format & Preparation Strategy',
+        duration: '2 weeks (10 lessons)',
+        topics: ['Core TestAS Pattern Solving', 'Engineering/Economics Module Practice', 'Timed Mock Exams & APS Review'],
+      },
+    ],
   },
   {
     id: 'resume-mastery',
@@ -246,6 +353,7 @@ export const mockCourses: Course[] = [
     lessons: 6,
     rating: 4.9,
     instructor: 'Priya Varma',
+    instructorTitle: 'Global Talent Acquisition Lead',
     description: 'Create an ATS-friendly resume, sharpen LinkedIn branding, and prepare for interviews, presentations, and workplace communication.',
     enrolled: true,
     progress: 100,
@@ -253,6 +361,27 @@ export const mockCourses: Course[] = [
     studentsCount: '3.1k',
     instructorAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80',
     level: 'Career Ready',
+    prerequisites: ['Open to students and professionals preparing for career transitions'],
+    outcomes: [
+      'Build a 90+ ATS score resume targeted for top tech & global firms',
+      'Optimize LinkedIn profile for 5x inbound recruiter outreach',
+      'Master the STAR method for behavioral & technical interview rounds',
+      'Negotiate compensation packages with confidence',
+    ],
+    modules: [
+      {
+        id: 'm1',
+        title: 'Module 1: High-Impact ATS Resume Architecture',
+        duration: '1 week (3 lessons)',
+        topics: ['ATS Parsing Algorithms & Keyword Optimization', 'Action Verb Formulas & Metrics-Driven Bullet Points', 'Tailoring Resumes per Job Description'],
+      },
+      {
+        id: 'm2',
+        title: 'Module 2: LinkedIn Branding & Recruiter Inbound Strategy',
+        duration: '1 week (3 lessons)',
+        topics: ['Headline & About Section Blueprint', 'Network Outreach & Cold Email Templates', 'Mock Interviews & Salary Negotiation'],
+      },
+    ],
   },
   {
     id: 'ielts-bootcamp',
@@ -262,6 +391,7 @@ export const mockCourses: Course[] = [
     lessons: 18,
     rating: 4.6,
     instructor: 'Prof. David Vance',
+    instructorTitle: 'Certified Test Prep Master Trainer',
     description: 'Prepare for major global entrance and language tests with mock tests, scoring rubrics, doubt clearing, and guided practice plans.',
     enrolled: false,
     progress: 0,
@@ -269,6 +399,33 @@ export const mockCourses: Course[] = [
     studentsCount: '5.6k',
     instructorAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80',
     level: 'Advanced',
+    prerequisites: ['Upper-intermediate English proficiency'],
+    outcomes: [
+      'Achieve 7.5+ Band in IELTS / 100+ in TOEFL / 320+ in GRE',
+      'Master timed strategies for Reading Comprehension & Essay Writing',
+      'Gain confidence in 1-on-1 Speaking interviews',
+      'Access 20+ full-length computer-based practice mocks',
+    ],
+    modules: [
+      {
+        id: 'm1',
+        title: 'Module 1: Listening & Speaking Mastery',
+        duration: '2 weeks (6 lessons)',
+        topics: ['Accent Recognition & Note-taking', 'Fluency, Coherence & Vocabulary for Speaking', 'Live Mock Speaking Sessions'],
+      },
+      {
+        id: 'm2',
+        title: 'Module 2: Reading Comprehension & Writing Task 1 & 2',
+        duration: '2 weeks (6 lessons)',
+        topics: ['Skimming, Scanning & Question Patterns', 'Academic Essay Structures & Data Descriptions', 'Grammar Precision & Cohesion'],
+      },
+      {
+        id: 'm3',
+        title: 'Module 3: GRE Quantitative & Verbal Strategy',
+        duration: '2 weeks (6 lessons)',
+        topics: ['Text Completion & Sentence Equivalence', 'Data Interpretation & Problem Solving', 'Full Simulation Mocks & Score Analysis'],
+      },
+    ],
   },
   {
     id: 'overseas-success',
@@ -278,6 +435,7 @@ export const mockCourses: Course[] = [
     lessons: 20,
     rating: 4.8,
     instructor: 'Elena Rostova',
+    instructorTitle: 'Global Admissions Director & Career Advisor',
     description: 'Move from university shortlisting to scholarships, visa preparation, internships, career planning, and pre-departure orientation.',
     enrolled: false,
     progress: 0,
@@ -285,6 +443,33 @@ export const mockCourses: Course[] = [
     studentsCount: '2.9k',
     instructorAvatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&q=80',
     level: 'Guided Mentoring',
+    prerequisites: ['Planning to study or work abroad in the next 12-24 months'],
+    outcomes: [
+      'Create a tailored 3-country university shortlist aligned with your budget',
+      'Draft winning Statement of Purpose (SOP) & Letters of Recommendation (LOR)',
+      'Prepare 100% compliant student visa financial documentation',
+      'Access pre-departure accommodation and post-study work visa support',
+    ],
+    modules: [
+      {
+        id: 'm1',
+        title: 'Module 1: University Shortlisting & Scholarship Strategy',
+        duration: '3 weeks (6 lessons)',
+        topics: ['Country Comparison & Budget Planning', 'Scholarship Grants & Financial Assistance', 'Professor Outreach for Research Programs'],
+      },
+      {
+        id: 'm2',
+        title: 'Module 2: SOP, LOR & Application Review',
+        duration: '3 weeks (6 lessons)',
+        topics: ['Crafting Authentic Personal Statements', 'Securing Academic & Professional LORs', 'Application Portal Submissions'],
+      },
+      {
+        id: 'm3',
+        title: 'Module 3: Student Visa & Pre-Departure Readiness',
+        duration: '4 weeks (8 lessons)',
+        topics: ['Financial Proofs, Blocked Accounts & Loans', 'Embassy Visa Interview Preparation', 'Housing, Flight & Overseas Cultural Transition'],
+      },
+    ],
   },
 ]
 
