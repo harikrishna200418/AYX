@@ -38,7 +38,7 @@ export const CountryDetailsPage: React.FC = () => {
   ]
 
   return (
-    <div className="flex flex-col gap-12 py-6">
+    <div className="flex flex-col gap-12 py-8 pt-6">
       {/* Hero Section */}
       <section className="glass-panel rounded-3xl overflow-hidden relative flex flex-col md:flex-row min-h-[50vh] border border-white/40 shadow-glass">
         <div className="w-full md:w-1/2 p-8 md:p-16 flex flex-col justify-center gap-6 z-10 relative">
