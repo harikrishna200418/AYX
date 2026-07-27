@@ -1,6 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PillButton } from './PillButton';
+import { useLenis } from '../providers/SmoothScrollProvider';
 
 interface CourseSelectionModalProps {
   isOpen: boolean;
@@ -21,9 +23,25 @@ export const CourseSelectionModal: React.FC<CourseSelectionModalProps> = ({
 }) => {
   const [selected, setSelected] = useState<Set<string>>(new Set(initialSelectedCourses));
   const [searchQuery, setSearchQuery] = useState('');
+  const lenis = useLenis();
+
+  // Scroll lock & Lenis pause
+  useEffect(() => {
+    if (isOpen) {
+      lenis?.stop();
+      document.body.style.overflow = 'hidden';
+    } else {
+      lenis?.start();
+      document.body.style.overflow = '';
+    }
+    return () => {
+      lenis?.start();
+      document.body.style.overflow = '';
+    };
+  }, [isOpen, lenis]);
 
   // Reset local state when opened with new initial selection
-  React.useEffect(() => {
+  useEffect(() => {
     if (isOpen) {
       setSelected(new Set(initialSelectedCourses));
       setSearchQuery('');
@@ -51,17 +69,19 @@ export const CourseSelectionModal: React.FC<CourseSelectionModalProps> = ({
     onClose();
   };
 
-  return (
+  if (!isOpen) return null;
+
+  const modalContent = (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+        <div data-lenis-prevent className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6 overflow-hidden">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-primary/20 backdrop-blur-sm"
+            className="absolute inset-0 bg-primary/30 backdrop-blur-sm"
           />
 
           {/* Modal Content */}
@@ -70,12 +90,14 @@ export const CourseSelectionModal: React.FC<CourseSelectionModalProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-2xl glass-panel rounded-2xl shadow-glass flex flex-col max-h-[85vh] overflow-hidden border border-white/40"
+            data-lenis-prevent
+            className="relative w-full max-w-2xl glass-panel rounded-2xl shadow-glass flex flex-col max-h-[85vh] overflow-hidden border border-white/40 z-10"
+            onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-on-surface/10">
               <div>
-                <h2 className="text-display-sm text-primary font-bold">Select Courses</h2>
+                <h2 className="text-headline-md text-primary font-bold">Select Courses</h2>
                 <p className="text-on-surface/70 text-sm mt-1">{fieldLabel}</p>
               </div>
               <button 
@@ -103,7 +125,7 @@ export const CourseSelectionModal: React.FC<CourseSelectionModalProps> = ({
             </div>
 
             {/* Courses List */}
-            <div className="flex-1 overflow-y-auto p-6 custom-scrollbar overscroll-contain" data-lenis-prevent="true">
+            <div className="flex-1 min-h-0 overflow-y-auto p-6 custom-scrollbar overscroll-contain" data-lenis-prevent>
               {filteredCourses.length === 0 ? (
                 <div className="text-center py-10 text-on-surface/50">
                   No courses found matching "{searchQuery}"
@@ -163,4 +185,8 @@ export const CourseSelectionModal: React.FC<CourseSelectionModalProps> = ({
       )}
     </AnimatePresence>
   );
+
+  return createPortal(modalContent, document.body);
 };
+
+export default CourseSelectionModal;

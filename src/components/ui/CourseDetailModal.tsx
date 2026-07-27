@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import {
   X,
   Sparkles,
@@ -14,6 +15,7 @@ import {
 } from 'lucide-react'
 import type { Course } from '../../data/mockData'
 import { PillButton } from './PillButton'
+import { useLenis } from '../providers/SmoothScrollProvider'
 
 interface CourseDetailModalProps {
   isOpen: boolean
@@ -31,6 +33,35 @@ export const CourseDetailModal: React.FC<CourseDetailModalProps> = ({
   isAuthenticated,
 }) => {
   const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null)
+  const lenis = useLenis()
+
+  // Stop/start Lenis AND lock body scroll when modal is open.
+  useEffect(() => {
+    if (isOpen) {
+      // 1. Stop Lenis virtual scroll engine
+      lenis?.stop()
+      // 2. Lock body scroll cleanly without layout shifts
+      document.body.style.overflow = 'hidden'
+    } else {
+      // Restore Lenis and body scroll
+      lenis?.start()
+      document.body.style.overflow = ''
+    }
+    return () => {
+      // Always restore on unmount
+      lenis?.start()
+      document.body.style.overflow = ''
+    }
+  }, [isOpen, lenis])
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    if (isOpen) document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, onClose])
 
   if (!isOpen || !course) return null
 
@@ -46,16 +77,27 @@ export const CourseDetailModal: React.FC<CourseDetailModalProps> = ({
     'overseas-success': 'Overseas Success',
   }
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-      {/* Backdrop */}
+  const modalContent = (
+    // Outer overlay — rendered via portal so it sits above EVERYTHING (header, footer)
+    // data-lenis-prevent prevents Lenis from hijacking wheel/touch events inside the modal
+    <div
+      data-lenis-prevent
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6 overflow-hidden"
+    >
+      {/* Backdrop — blocks clicks to the page below */}
       <div
-        className="fixed inset-0 bg-slate-950/60 backdrop-blur-md transition-opacity"
+        className="fixed inset-0 bg-slate-950/60 backdrop-blur-md"
         onClick={onClose}
+        aria-hidden="true"
       />
 
       {/* Modal Card */}
-      <div className="relative w-full max-w-4xl bg-surface/90 backdrop-blur-2xl border border-white/40 shadow-glass rounded-3xl overflow-hidden z-10 max-h-[90vh] flex flex-col text-on-surface my-auto">
+      <div
+        data-lenis-prevent
+        className="relative w-full max-w-4xl bg-surface/90 backdrop-blur-2xl border border-white/40 shadow-glass rounded-3xl overflow-hidden z-10 max-h-[85vh] sm:max-h-[90vh] flex flex-col text-on-surface"
+        // Prevent click inside modal from closing it via backdrop
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header Hero Banner */}
         <div className="relative h-48 sm:h-64 w-full bg-slate-900 shrink-0 overflow-hidden">
           <img
@@ -93,8 +135,11 @@ export const CourseDetailModal: React.FC<CourseDetailModalProps> = ({
           </div>
         </div>
 
-        {/* Modal Scrollable Body */}
-        <div className="p-6 sm:p-8 space-y-8 overflow-y-auto flex-1 custom-scrollbar">
+        {/* Modal Scrollable Body — data-lenis-prevent and min-h-0 enable standard flexbox scroll */}
+        <div
+          data-lenis-prevent
+          className="p-6 sm:p-8 space-y-8 overflow-y-auto flex-1 min-h-0 overscroll-contain"
+        >
           {/* Key Metrics Strip */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="p-3.5 rounded-2xl bg-white/50 border border-white/40 flex items-center gap-3">
@@ -258,7 +303,7 @@ export const CourseDetailModal: React.FC<CourseDetailModalProps> = ({
           )}
         </div>
 
-        {/* Footer Action Bar */}
+        {/* Footer Action Bar — sticky at bottom of modal, never overlaps */}
         <div className="p-4 sm:p-6 bg-white/70 border-t border-white/40 flex flex-col sm:flex-row items-center justify-between gap-4 shrink-0">
           <div>
             <div className="text-xs text-on-surface-variant font-medium">Programme Status</div>
@@ -292,6 +337,10 @@ export const CourseDetailModal: React.FC<CourseDetailModalProps> = ({
       </div>
     </div>
   )
+
+  // Render into document.body via portal — completely escapes all parent stacking contexts
+  // This is what ensures the modal is above the header, footer, and everything else
+  return createPortal(modalContent, document.body)
 }
 
 export default CourseDetailModal

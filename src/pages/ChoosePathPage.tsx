@@ -14,7 +14,7 @@ interface OnboardingPath {
 
 export const ChoosePathPage: React.FC = () => {
   const navigate = useNavigate()
-  const { setOnboardingPath } = useAuthStore()
+  const { setOnboardingPath, login } = useAuthStore()
 
   const paths: OnboardingPath[] = [
     {
@@ -47,10 +47,14 @@ export const ChoosePathPage: React.FC = () => {
     },
   ]
 
-  const handleSelectPath = (pathId: string) => {
+  const handleSelectPath = async (pathId: string) => {
+    // Set path first
     setOnboardingPath(pathId)
-    // Go to dashboard
-    navigate('/dashboard')
+    // Only mock login if user is not already authenticated (e.g. from signup)
+    if (!isAuthenticated && !sessionStorage.getItem('isAuthenticated')) {
+      await login('user@ayxvibe.com', 'Alex Mercer')
+    }
+    navigate('/dashboard', { replace: true })
   }
 
   return (

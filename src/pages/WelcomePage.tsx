@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useMotionValue, useTransform } from 'framer-motion'
+import { useLenis } from '../components/providers/SmoothScrollProvider'
 import { PillButton } from '../components/ui/PillButton'
 import { GlassCard } from '../components/ui/GlassCard'
 import { AnimatedText } from '../components/ui/AnimatedText'
@@ -9,12 +10,25 @@ import { Globe, BookOpen, Search, Calendar, Plane, Cpu, Languages, TrendingUp, A
 
 export const WelcomePage: React.FC = () => {
   const navigate = useNavigate()
-  const { scrollYProgress } = useScroll()
-  
-  // Parallax effects
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, 300])
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0])
-  const statsY = useTransform(scrollYProgress, [0, 1], [0, -100])
+  const lenis = useLenis()
+
+  // Use a MotionValue synced to Lenis scroll instead of framer's useScroll
+  // This prevents the two scroll systems from conflicting/jittering
+  const scrollProgress = useMotionValue(0)
+
+  useEffect(() => {
+    if (!lenis) return
+    const handler = ({ progress }: { progress: number }) => {
+      scrollProgress.set(progress)
+    }
+    lenis.on('scroll', handler)
+    return () => lenis.off('scroll', handler)
+  }, [lenis, scrollProgress])
+
+  // Parallax effects driven by the Lenis-synced MotionValue
+  const heroY = useTransform(scrollProgress, [0, 1], [0, 300])
+  const heroOpacity = useTransform(scrollProgress, [0, 0.2], [1, 0])
+  const statsY = useTransform(scrollProgress, [0, 1], [0, -100])
 
   return (
     <div className="relative bg-background">

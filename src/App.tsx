@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { PublicLayout } from './layouts/PublicLayout'
 import { AppShell } from './layouts/AppShell'
 import { SmoothScrollProvider } from './components/providers/SmoothScrollProvider'
+import { ScrollToTop } from './components/ui/ScrollToTop'
 // Screens
 import WelcomePage from './pages/WelcomePage'
 import LoginPage from './pages/LoginPage'
@@ -19,6 +20,8 @@ function App() {
   return (
     <SmoothScrollProvider>
       <BrowserRouter>
+        {/* Resets scroll position to top on every route change */}
+        <ScrollToTop />
         <Routes>
           {/* Public Routes */}
           <Route element={<PublicLayout />}>

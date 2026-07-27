@@ -8,14 +8,19 @@ export const AppShell: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
+  // Synchronous check against sessionStorage to avoid a false-negative on first render
+  // (Zustand hydrates from sessionStorage at store creation, but reading it directly here
+  // prevents the brief window where isAuthenticated is false before the store settles)
+  const isActuallyAuthenticated = isAuthenticated || sessionStorage.getItem('isAuthenticated') === 'true'
+
   // Gate the route: Redirect to login if not authenticated
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isActuallyAuthenticated) {
       navigate('/login', { state: { from: location } })
     }
-  }, [isAuthenticated, navigate, location])
+  }, [isActuallyAuthenticated, navigate, location])
 
-  if (!isAuthenticated) {
+  if (!isActuallyAuthenticated) {
     return null // or a loading spinner
   }
 

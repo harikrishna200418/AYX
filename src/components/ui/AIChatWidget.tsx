@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface Message {
@@ -13,6 +13,14 @@ export const AIChatWidget: React.FC = () => {
     { id: '1', sender: 'bot', text: 'Hi! I am your AYXVIBE AI Counsellor. Ask me anything about studying abroad, AI courses, or global career paths!' }
   ])
   const [inputValue, setInputValue] = useState('')
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  // Auto scroll to bottom when new message arrives
+  useEffect(() => {
+    if (isOpen) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [messages, isOpen])
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault()
@@ -70,7 +78,7 @@ export const AIChatWidget: React.FC = () => {
             </div>
 
             {/* Message Area */}
-            <div className="flex-grow p-4 overflow-y-auto space-y-3 flex flex-col">
+            <div data-lenis-prevent className="flex-grow p-4 overflow-y-auto space-y-3 flex flex-col">
               {messages.map((msg) => (
                 <div
                   key={msg.id}
@@ -83,6 +91,7 @@ export const AIChatWidget: React.FC = () => {
                   {msg.text}
                 </div>
               ))}
+              <div ref={messagesEndRef} />
             </div>
 
             {/* Input Form */}
