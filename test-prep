@@ -1,0 +1,75 @@
+[33mcommit 222c169e668fe1edcbd13afb008110aa33ef5475[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Merge: d30797d 1833acf
+Author: HARI KRISHNA MANGALI <214379285+harikrishna200418@users.noreply.github.com>
+Date:   Tue Jul 21 17:26:58 2026 +0530
+
+    Merge pull request #3 from harikrishna200418/feature/test-prep
+    
+    Add academy feature hub
+
+[33mcommit 1833acf2cf2938bca5a3c32a44e00313b69938d4[m[33m ([m[1;31morigin/feature/test-prep[m[33m)[m
+Author: ash <anveshreddya06@gmail.com>
+Date:   Tue Jul 21 17:23:42 2026 +0530
+
+    Add academy feature hub
+
+[33mcommit d30797d07fde3d087ccdae349c6678c0dd161410[m
+Merge: 3713ba5 0e239c4
+Author: Hari Krishna <214379285+harikrishna200418@users.noreply.github.com>
+Date:   Tue Jul 21 17:17:36 2026 +0530
+
+    Merge branch 'feature/destination-page'
+
+[33mcommit 0e239c4f726abcf212880c714801f9e06e7fd5cd[m[33m ([m[1;31morigin/feature/destination-page[m[33m, [m[1;32mfeature/destination-page[m[33m)[m
+Author: Hari Krishna <214379285+harikrishna200418@users.noreply.github.com>
+Date:   Tue Jul 21 17:13:50 2026 +0530
+
+    Implement two-step Course Selection Modal and fix theme contrast
+
+[33mcommit 3713ba5d9e67e48517016c5f5556c59b8f0dad93[m
+Merge: cbb59c3 327ef08
+Author: HARI KRISHNA MANGALI <214379285+harikrishna200418@users.noreply.github.com>
+Date:   Tue Jul 21 16:22:31 2026 +0530
+
+    Merge pull request #2 from harikrishna200418/feature/destination-page
+    
+    Enhance GlassSelect dropdown UI, update filter fields, and fix smooth…
+
+[33mcommit 327ef081167fd7e78e1c580e8b25dc2fc595ec7a[m
+Author: Hari Krishna <214379285+harikrishna200418@users.noreply.github.com>
+Date:   Tue Jul 21 16:19:49 2026 +0530
+
+    Enhance GlassSelect dropdown UI, update filter fields, and fix smooth scroll bug
+
+[33mcommit cbb59c3c42ee35ed80aa9d19badac50aad2875dc[m
+Merge: 41e47ba ea89fb9
+Author: HARI KRISHNA MANGALI <214379285+harikrishna200418@users.noreply.github.com>
+Date:   Tue Jul 21 15:17:48 2026 +0530
+
+    Merge pull request #1 from harikrishna200418/feature/destination-page
+    
+    Enhance UI/UX with 3D perspective entry and animation refinements
+
+[33mcommit ea89fb9ecf2516644cf90f24571553e85ec6a441[m
+Author: Hari Krishna <214379285+harikrishna200418@users.noreply.github.com>
+Date:   Tue Jul 21 15:15:38 2026 +0530
+
+    Enhance UI/UX with 3D perspective entry and animation refinements
+
+[33mcommit 41e47ba562f933149a83d99bd6507cd67c311d94[m
+Author: Hari Krishna <214379285+harikrishna200418@users.noreply.github.com>
+Date:   Sat Jul 18 15:02:58 2026 +0530
+
+    Implement dynamic destination countries section
+
+[33mcommit b3c2d5278a75fd17b3c7037d4cbf1594dd76d6ac[m
+Author: Hari Krishna <214379285+harikrishna200418@users.noreply.github.com>
+Date:   Sat Jul 18 12:44:56 2026 +0530
+
+    Update App component
+
+[33mcommit 99435667b1c1a33f92390a9751404c5e879bed4f[m[33m ([m[1;31morigin/dev[m[33m, [m[1;31morigin/back-up[m[33m)[m
+Author: Hari Krishna <214379285+harikrishna200418@users.noreply.github.com>
+Date:   Sat Jul 18 12:33:54 2026 +0530
+
+    Initial commit
