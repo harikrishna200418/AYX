@@ -14,7 +14,7 @@ interface OnboardingPath {
 
 export const ChoosePathPage: React.FC = () => {
   const navigate = useNavigate()
-  const { setOnboardingPath, login } = useAuthStore()
+  const { isAuthenticated, setOnboardingPath, login } = useAuthStore()
 
   const paths: OnboardingPath[] = [
     {
