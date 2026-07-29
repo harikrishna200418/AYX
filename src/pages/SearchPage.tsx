@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import { GlassCard } from '../components/ui/GlassCard'
 import { GlassInput } from '../components/ui/GlassInput'
 import { PillButton } from '../components/ui/PillButton'
@@ -180,7 +181,13 @@ export const FIELD_COURSES: Record<string, string[]> = {
     'Actuarial Science', 'Real Estate Management', 'Logistics and Supply Chain',
     'E-commerce', 'UX/UI Design'
   ]
-};
+}
+
+const levelColors: Record<string, string> = {
+  bachelor: 'bg-tertiary/10 text-tertiary border border-tertiary/20',
+  master: 'bg-secondary/10 text-secondary border border-secondary/20',
+  doctorate: 'bg-on-tertiary-container/10 text-on-tertiary-container border border-on-tertiary-container/20',
+}
 
 export const SearchPage: React.FC = () => {
   const navigate = useNavigate()
@@ -189,12 +196,247 @@ export const SearchPage: React.FC = () => {
   const [selectedLevel, setSelectedLevel] = useState('')
   const [selectedField, setSelectedField] = useState('')
   const [selectedCourses, setSelectedCourses] = useState<string[]>([])
-  
+  const [filtersOpen, setFiltersOpen] = useState(false)
+
   // Modal State
   const [isCourseModalOpen, setIsCourseModalOpen] = useState(false)
   const [activeModalField, setActiveModalField] = useState('')
 
   const programs: Program[] = [
+    {
+      id: 'mit-eecs',
+      title: 'MSc in Electrical Engineering and Computer Science',
+      university: 'Massachusetts Institute of Technology (MIT)',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'master',
+      field: 'engineering',
+      courses: ['Computer Engineering', 'Computer Science'],
+      tuition: '$58,240 / year',
+      duration: '2 Years',
+      ielts: '7.0',
+    },
+    {
+      id: 'mit-ai',
+      title: 'MS in Artificial Intelligence & Machine Learning',
+      university: 'Massachusetts Institute of Technology (MIT)',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'master',
+      field: 'cs-it',
+      courses: ['Artificial Intelligence (AI)', 'Machine Learning'],
+      tuition: '$60,500 / year',
+      duration: '2 Years',
+      ielts: '7.5',
+    },
+    {
+      id: 'harvard-mba',
+      title: 'Master of Business Administration (MBA)',
+      university: 'Harvard University',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'master',
+      field: 'business',
+      courses: ['Master of Business Administration (MBA)', 'Business Administration'],
+      tuition: '$74,910 / year',
+      duration: '2 Years',
+      ielts: '7.5',
+    },
+    {
+      id: 'harvard-mph',
+      title: 'Master of Public Health (MPH) in Global Health',
+      university: 'Harvard University',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'master',
+      field: 'health',
+      courses: ['Public Health', 'Healthcare Management'],
+      tuition: '$56,550 / year',
+      duration: '1 Year',
+      ielts: '7.5',
+    },
+    {
+      id: 'stanford-cs',
+      title: 'MS in Computer Science (Artificial Intelligence specialization)',
+      university: 'Stanford University',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'master',
+      field: 'cs-it',
+      courses: ['Computer Science', 'Artificial Intelligence (AI)'],
+      tuition: '$57,400 / year',
+      duration: '2 Years',
+      ielts: '7.0',
+    },
+    {
+      id: 'stanford-bs',
+      title: 'BSc in Symbolic Systems & AI',
+      university: 'Stanford University',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'bachelor',
+      field: 'cs-it',
+      courses: ['Computer Science', 'Human-Computer Interaction (HCI)'],
+      tuition: '$56,169 / year',
+      duration: '4 Years',
+      ielts: '7.0',
+    },
+    {
+      id: 'caltech-physics',
+      title: 'PhD in Physics & Quantum Science',
+      university: 'California Institute of Technology (Caltech)',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'doctorate',
+      field: 'science',
+      courses: ['Physics', 'Quantum Computing'],
+      tuition: '$60,864 / year (Fully Funded)',
+      duration: '5 Years',
+      ielts: '7.5',
+    },
+    {
+      id: 'princeton-mfin',
+      title: 'Master in Finance (MFin)',
+      university: 'Princeton University',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'master',
+      field: 'business',
+      courses: ['Finance', 'Investment Management'],
+      tuition: '$59,710 / year',
+      duration: '2 Years',
+      ielts: '7.5',
+    },
+    {
+      id: 'uchicago-booth',
+      title: 'Full-Time MBA (Chicago Booth)',
+      university: 'University of Chicago',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'master',
+      field: 'business',
+      courses: ['Master of Business Administration (MBA)', 'Finance'],
+      tuition: '$81,000 / year',
+      duration: '2 Years',
+      ielts: '7.0',
+    },
+    {
+      id: 'yale-llm',
+      title: 'Master of Laws (LL.M.)',
+      university: 'Yale University',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'master',
+      field: 'law',
+      courses: ['Law (LLB)', 'International Law'],
+      tuition: '$71,425 / year',
+      duration: '1 Year',
+      ielts: '7.5',
+    },
+    {
+      id: 'columbia-ds',
+      title: 'MS in Data Science',
+      university: 'Columbia University',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'master',
+      field: 'cs-it',
+      courses: ['Data Science', 'Data Analytics'],
+      tuition: '$65,340 / year',
+      duration: '1.5 Years',
+      ielts: '7.0',
+    },
+    {
+      id: 'upenn-wharton',
+      title: 'MBA in Finance & Business Analytics (Wharton)',
+      university: 'University of Pennsylvania',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'master',
+      field: 'business',
+      courses: ['Master of Business Administration (MBA)', 'Business Analytics'],
+      tuition: '$84,874 / year',
+      duration: '2 Years',
+      ielts: '7.5',
+    },
+    {
+      id: 'cornell-stats',
+      title: 'MPS in Applied Statistics & Data Science',
+      university: 'Cornell University',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'master',
+      field: 'cs-it',
+      courses: ['Data Analytics', 'Statistics'],
+      tuition: '$63,200 / year',
+      duration: '1 Year',
+      ielts: '7.0',
+    },
+    {
+      id: 'duke-mem',
+      title: 'Master of Engineering Management (MEM)',
+      university: 'Duke University',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'master',
+      field: 'engineering',
+      courses: ['Industrial Engineering', 'Project Management'],
+      tuition: '$60,480 / year',
+      duration: '1 Year',
+      ielts: '7.0',
+    },
+    {
+      id: 'jhu-mph',
+      title: 'Master of Public Health & Healthcare Management',
+      university: 'Johns Hopkins University',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'master',
+      field: 'health',
+      courses: ['Public Health', 'Healthcare Management'],
+      tuition: '$60,480 / year',
+      duration: '1 Year',
+      ielts: '7.0',
+    },
+    {
+      id: 'northwestern-msit',
+      title: 'MS in Information Technology & Cloud Computing',
+      university: 'Northwestern University',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'master',
+      field: 'cs-it',
+      courses: ['Information Technology (IT)', 'Cloud Computing'],
+      tuition: '$62,193 / year',
+      duration: '1 Year',
+      ielts: '7.0',
+    },
+    {
+      id: 'ucberkeley-eecs',
+      title: 'Master of Engineering (EECS - Data Science & AI)',
+      university: 'University of California, Berkeley (UC Berkeley)',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'master',
+      field: 'cs-it',
+      courses: ['Software Engineering', 'Data Science'],
+      tuition: '$54,430 / year',
+      duration: '1 Year',
+      ielts: '7.0',
+    },
+    {
+      id: 'ucla-msba',
+      title: 'MS in Business Analytics (MSBA)',
+      university: 'University of California, Los Angeles (UCLA)',
+      country: 'United States',
+      countryId: 'united-states',
+      level: 'master',
+      field: 'business',
+      courses: ['Business Analytics', 'Data Science'],
+      tuition: '$52,800 / year',
+      duration: '15 Months',
+      ielts: '7.0',
+    },
     {
       id: 'oxford-ds-ai',
       title: 'MSc in Data Science and Artificial Intelligence',
@@ -220,32 +462,6 @@ export const SearchPage: React.FC = () => {
       tuition: '£38,500 / year',
       duration: '11 Months',
       ielts: '7.5',
-    },
-    {
-      id: 'mit-eecs',
-      title: 'MSc in Electrical Engineering and Computer Science',
-      university: 'Massachusetts Institute of Technology',
-      country: 'United States',
-      countryId: 'united-states',
-      level: 'master',
-      field: 'engineering',
-      courses: ['Computer Engineering', 'Computer Science'],
-      tuition: '$58,240 / year',
-      duration: '2 Years',
-      ielts: '7.0',
-    },
-    {
-      id: 'stanford-cs',
-      title: 'MS in Computer Science (Artificial Intelligence specialization)',
-      university: 'Stanford University',
-      country: 'United States',
-      countryId: 'united-states',
-      level: 'master',
-      field: 'cs-it',
-      courses: ['Computer Science', 'Artificial Intelligence (AI)'],
-      tuition: '$57,400 / year',
-      duration: '2 Years',
-      ielts: '7.0',
     },
     {
       id: 'oxford-mba',
@@ -293,12 +509,12 @@ export const SearchPage: React.FC = () => {
       const matchSearch =
         prog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         prog.university.toLowerCase().includes(searchTerm.toLowerCase())
-      
+
       const matchCountry = selectedCountry ? prog.countryId === selectedCountry : true
       const matchLevel = selectedLevel ? prog.level === selectedLevel : true
       const matchField = selectedField ? prog.field === selectedField : true
-      const matchCourse = selectedCourses.length > 0 
-        ? (prog.courses && prog.courses.some(c => selectedCourses.includes(c))) 
+      const matchCourse = selectedCourses.length > 0
+        ? (prog.courses && prog.courses.some(c => selectedCourses.includes(c)))
         : true
 
       return matchSearch && matchCountry && matchLevel && matchField && matchCourse
@@ -313,13 +529,95 @@ export const SearchPage: React.FC = () => {
     setSelectedCourses([])
   }
 
+  const activeFilterCount = [selectedCountry, selectedLevel, selectedField].filter(Boolean).length + selectedCourses.length
+
+  const FiltersPanel = (
+    <GlassCard hoverable={false} overflowHidden={false} className="p-5 flex flex-col gap-5">
+      <div className="flex justify-between items-center pb-2 border-b border-white/20">
+        <h3 className="font-headline text-label-md text-primary font-bold uppercase tracking-wider flex items-center gap-2">
+          <span className="material-symbols-outlined text-[18px] text-secondary">tune</span>
+          Filters
+          {activeFilterCount > 0 && (
+            <span className="ml-1 inline-flex items-center justify-center w-5 h-5 rounded-full bg-secondary text-white text-[10px] font-bold">
+              {activeFilterCount}
+            </span>
+          )}
+        </h3>
+        <button
+          onClick={handleResetFilters}
+          className="text-xs text-secondary hover:text-primary font-bold hover:underline transition-all"
+        >
+          Reset All
+        </button>
+      </div>
+
+      {/* Country Selector */}
+      <GlassSelect
+        label="Country"
+        options={countryOptions}
+        value={selectedCountry}
+        onChange={setSelectedCountry}
+      />
+
+      {/* Degree Level */}
+      <GlassSelect
+        label="Degree Level"
+        options={levelOptions}
+        value={selectedLevel}
+        onChange={setSelectedLevel}
+      />
+
+      {/* Field of Study */}
+      <div className="flex flex-col gap-2">
+        <GlassSelect
+          label="Field of Study"
+          options={fieldOptions}
+          value={selectedField}
+          onChange={(val) => {
+            setSelectedField(val)
+            if (val && FIELD_COURSES[val]) {
+              setActiveModalField(val)
+              setIsCourseModalOpen(true)
+              if (val !== activeModalField) {
+                setSelectedCourses([])
+              }
+            } else {
+              setSelectedCourses([])
+            }
+          }}
+        />
+        {selectedCourses.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mt-1">
+            {selectedCourses.map(course => (
+              <div key={course} className="flex items-center gap-1.5 bg-secondary/10 text-secondary text-[11px] font-medium px-2.5 py-1 rounded-full border border-secondary/20">
+                <span>{course}</span>
+                <button
+                  onClick={() => setSelectedCourses(prev => prev.filter(c => c !== course))}
+                  className="hover:text-white transition-colors flex items-center justify-center bg-secondary/20 hover:bg-secondary/60 rounded-full p-0.5"
+                >
+                  <span className="material-symbols-outlined text-[11px]">close</span>
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </GlassCard>
+  )
+
   return (
-    <div className="py-6 flex flex-col gap-10">
-      {/* Title */}
-      <div className="text-center max-w-3xl mx-auto">
-        <h1 className="text-headline-lg text-primary font-bold mb-3">Global Program Directory</h1>
+    <div className="px-margin-mobile md:px-margin-desktop py-8 md:py-12 max-w-container-max mx-auto flex flex-col gap-8">
+      {/* Header */}
+      <div className="text-center max-w-3xl mx-auto space-y-3">
+        <div className="inline-flex items-center gap-2 rounded-full border border-secondary/20 bg-white/50 px-4 py-1.5 text-xs font-headline font-bold uppercase tracking-wider text-secondary">
+          <span className="material-symbols-outlined text-[14px]">school</span>
+          Global Program Directory
+        </div>
+        <h1 className="text-headline-md md:text-headline-lg text-primary font-bold">
+          Find Your Perfect Program
+        </h1>
         <p className="text-body-md text-on-surface-variant">
-          Discover and filter world-class courses in computing, AI, business, and engineering across top universities.
+          Discover and filter world-class courses across top global universities.
         </p>
       </div>
 
@@ -335,127 +633,149 @@ export const SearchPage: React.FC = () => {
         />
       </div>
 
+      {/* Mobile Filter Toggle Button */}
+      <div className="lg:hidden">
+        <button
+          id="filter-toggle"
+          onClick={() => setFiltersOpen((p) => !p)}
+          className="w-full flex items-center justify-between px-5 py-3 rounded-2xl bg-white/60 border border-white/40 shadow-glass font-headline font-bold text-sm text-primary hover:bg-white/80 transition-all"
+        >
+          <span className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-[18px] text-secondary">tune</span>
+            Filters
+            {activeFilterCount > 0 && (
+              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-secondary text-white text-[10px] font-bold">
+                {activeFilterCount}
+              </span>
+            )}
+          </span>
+          <motion.span
+            animate={{ rotate: filtersOpen ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+            className="material-symbols-outlined text-[20px] text-on-surface-variant"
+          >
+            expand_more
+          </motion.span>
+        </button>
+
+        {/* Collapsible Filter Panel on mobile */}
+        <AnimatePresence>
+          {filtersOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="overflow-hidden mt-3"
+            >
+              {FiltersPanel}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
       {/* Workspace Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column: Filters Panel */}
-        <aside className="lg:col-span-3 flex flex-col gap-6 z-20 relative">
-          <GlassCard hoverable={false} overflowHidden={false} className="p-6 flex flex-col gap-5">
-            <div className="flex justify-between items-center pb-2 border-b border-white/20">
-              <h3 className="font-headline text-label-md text-primary font-bold uppercase tracking-wider">
-                Filters
-              </h3>
-              <button
-                onClick={handleResetFilters}
-                className="text-xs text-secondary hover:text-primary font-bold hover:underline transition-all"
-              >
-                Reset All
-              </button>
-            </div>
-
-            {/* Country Selector */}
-            <GlassSelect
-              label="Country"
-              options={countryOptions}
-              value={selectedCountry}
-              onChange={setSelectedCountry}
-            />
-
-            {/* Degree Level */}
-            <GlassSelect
-              label="Degree Level"
-              options={levelOptions}
-              value={selectedLevel}
-              onChange={setSelectedLevel}
-            />
-
-            {/* Field of Study */}
-            <div className="flex flex-col gap-2">
-              <GlassSelect
-                label="Field of Study"
-                options={fieldOptions}
-                value={selectedField}
-                onChange={(val) => {
-                  setSelectedField(val)
-                  if (val && FIELD_COURSES[val]) {
-                    setActiveModalField(val)
-                    setIsCourseModalOpen(true)
-                    if (val !== activeModalField) {
-                      setSelectedCourses([])
-                    }
-                  } else {
-                    setSelectedCourses([])
-                  }
-                }}
-              />
-              {selectedCourses.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mt-1">
-                  {selectedCourses.map(course => (
-                    <div key={course} className="flex items-center gap-1.5 bg-primary/20 text-primary text-[11px] font-medium px-2 py-1 rounded-full border border-primary/30">
-                      <span>{course}</span>
-                      <button 
-                        onClick={() => setSelectedCourses(prev => prev.filter(c => c !== course))}
-                        className="hover:text-white transition-colors flex items-center justify-center bg-primary/20 hover:bg-primary/50 rounded-full p-0.5"
-                      >
-                        <span className="material-symbols-outlined text-[12px]">close</span>
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </GlassCard>
+        {/* Left Column: Filters Panel (desktop only) */}
+        <aside className="hidden lg:block lg:col-span-3 sticky top-28 z-20">
+          {FiltersPanel}
         </aside>
 
         {/* Right Column: Search Results Grid */}
-        <div className="lg:col-span-9 flex flex-col gap-6">
-          <div className="text-sm text-on-surface-variant">
-            Showing <span className="font-bold text-primary">{filteredPrograms.length}</span> programs
+        <div className="lg:col-span-9 flex flex-col gap-5">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-on-surface-variant">
+              Showing <span className="font-bold text-primary">{filteredPrograms.length}</span>{' '}
+              {filteredPrograms.length === 1 ? 'program' : 'programs'}
+            </p>
+            {activeFilterCount > 0 && (
+              <button
+                onClick={handleResetFilters}
+                className="text-xs text-secondary hover:underline font-bold transition-all"
+              >
+                Clear filters
+              </button>
+            )}
           </div>
 
           {filteredPrograms.length === 0 ? (
-            <div className="text-center py-20 glass-panel rounded-2xl p-8">
-              <span className="material-symbols-outlined text-primary text-5xl mb-4">search_off</span>
-              <h3 className="text-headline-md text-primary font-bold mb-2">No Programs Found</h3>
-              <p className="text-body-md text-on-surface-variant">Try refining your search terms or filter configurations.</p>
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center py-16 glass-panel rounded-2xl p-8 border border-white/30"
+            >
+              <div className="w-20 h-20 rounded-full bg-secondary/10 flex items-center justify-center mx-auto mb-5">
+                <span className="material-symbols-outlined text-secondary text-4xl">search_off</span>
+              </div>
+              <h3 className="text-headline-sm text-primary font-bold mb-2">No Programs Found</h3>
+              <p className="text-body-md text-on-surface-variant max-w-xs mx-auto mb-6">
+                Try broadening your search or adjusting your filter selections.
+              </p>
+              <PillButton variant="secondary" className="!text-sm !py-2 !px-6" onClick={handleResetFilters}>
+                Reset Filters
+              </PillButton>
+            </motion.div>
           ) : (
-            <div className="flex flex-col gap-5">
-              {filteredPrograms.map((prog) => (
-                <GlassCard key={prog.id} className="p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 select-none">
-                  <div className="flex-grow space-y-2">
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs font-bold uppercase tracking-wider text-secondary bg-secondary/15 px-2.5 py-0.5 rounded-full border border-secondary/10">
-                        {prog.level}
-                      </span>
-                      <span className="text-xs font-headline font-bold text-on-surface-variant">
-                        {prog.country}
-                      </span>
-                    </div>
-                    
-                    <h3 className="font-headline text-[18px] md:text-[20px] font-bold text-primary">
-                      {prog.title}
-                    </h3>
-                    <p className="text-sm text-on-surface-variant font-medium flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-[16px] text-outline">account_balance</span>
-                      {prog.university}
-                    </p>
-                  </div>
+            <div className="flex flex-col gap-4">
+              {filteredPrograms.map((prog, i) => (
+                <motion.div
+                  key={prog.id}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.06, duration: 0.3 }}
+                >
+                  <GlassCard className="p-5 md:p-6 group hover:shadow-glass-hover transition-all duration-300">
+                    <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+                      {/* Left: Info */}
+                      <div className="flex-grow space-y-2.5 min-w-0">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className={`text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${levelColors[prog.level]}`}>
+                            {prog.level}
+                          </span>
+                          <span className="text-xs font-headline font-semibold text-on-surface-variant flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[13px]">location_on</span>
+                            {prog.country}
+                          </span>
+                        </div>
 
-                  <div className="flex flex-row md:flex-col md:items-end justify-between w-full md:w-auto border-t md:border-t-0 border-white/20 pt-4 md:pt-0 gap-4 shrink-0">
-                    <div className="text-left md:text-right space-y-1">
-                      <div className="text-[11px] text-on-surface-variant font-bold uppercase tracking-wider">Est. Tuition</div>
-                      <div className="text-sm font-bold text-primary">{prog.tuition}</div>
+                        <h3 className="font-headline text-[16px] sm:text-[18px] font-bold text-primary leading-snug group-hover:text-secondary transition-colors duration-200">
+                          {prog.title}
+                        </h3>
+                        <p className="text-sm text-on-surface-variant font-medium flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[15px] text-outline">account_balance</span>
+                          {prog.university}
+                        </p>
+
+                        {/* Metadata Badges */}
+                        <div className="flex flex-wrap gap-2 pt-1">
+                          <span className="inline-flex items-center gap-1 text-[11px] font-headline font-semibold text-on-surface-variant bg-surface-container px-2.5 py-1 rounded-full">
+                            <span className="material-symbols-outlined text-[12px]">schedule</span>
+                            {prog.duration}
+                          </span>
+                          <span className="inline-flex items-center gap-1 text-[11px] font-headline font-semibold text-on-surface-variant bg-surface-container px-2.5 py-1 rounded-full">
+                            <span className="material-symbols-outlined text-[12px]">record_voice_over</span>
+                            IELTS {prog.ielts}+
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Right: Tuition + CTA */}
+                      <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-3 shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-white/20">
+                        <div className="text-left sm:text-right">
+                          <div className="text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">Est. Tuition</div>
+                          <div className="text-sm font-bold text-primary mt-0.5">{prog.tuition}</div>
+                        </div>
+                        <PillButton
+                          variant="secondary"
+                          className="!py-2 !px-5 !text-xs shrink-0"
+                          onClick={() => navigate(`/destinations/${prog.countryId}`)}
+                        >
+                          View Details
+                        </PillButton>
+                      </div>
                     </div>
-                    
-                    <PillButton
-                      variant="secondary"
-                      className="!py-2 !px-5 !text-xs"
-                      onClick={() => navigate(`/destinations/${prog.countryId}`)}
-                    >
-                      View University
-                    </PillButton>
-                  </div>
-                </GlassCard>
+                  </GlassCard>
+                </motion.div>
               ))}
             </div>
           )}

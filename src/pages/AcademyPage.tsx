@@ -215,18 +215,20 @@ export const AcademyPage: React.FC = () => {
   const ActiveDivisionIcon = activeDivisionData.icon
 
   return (
-    <div className="px-margin-mobile md:px-margin-desktop py-8 md:py-12 flex flex-col gap-14 max-w-container-max mx-auto">
+    <div className="px-margin-mobile md:px-margin-desktop py-8 md:py-12 flex flex-col gap-12 max-w-container-max mx-auto">
       <section className="max-w-3xl space-y-5">
         <div className="inline-flex items-center gap-2 rounded-full border border-secondary/20 bg-white/50 px-4 py-2 text-xs font-headline font-bold uppercase tracking-wider text-secondary">
           <Sparkles className="h-4 w-4" />
           AYXVIBE Academy
         </div>
 
-        <div className="space-y-3">
-          <h1 className="text-headline-md md:text-headline-lg text-primary font-bold">
-            Empowering Skills. Enabling Global Careers.
+        <div className="space-y-4">
+          <h1 className="text-[28px] sm:text-headline-md md:text-headline-lg text-primary font-bold leading-tight">
+            Empowering Skills.
+            <br />
+            <span className="text-secondary">Enabling Global Careers.</span>
           </h1>
-          <p className="text-body-md md:text-body-lg text-on-surface-variant max-w-2xl">
+          <p className="text-body-md md:text-body-lg text-on-surface-variant max-w-2xl leading-relaxed">
             A unified academy for study abroad exams, AI skills, languages, career development, and overseas success mentoring.
           </p>
         </div>
@@ -240,6 +242,16 @@ export const AcademyPage: React.FC = () => {
           <PillButton variant="secondary" className="!px-6 !py-3" onClick={() => setActiveCategory('all')}>
             Explore Courses
           </PillButton>
+        </div>
+
+        {/* Stats row */}
+        <div className="flex flex-wrap gap-4 sm:gap-8 pt-2">
+          {[['5', 'Academies'], ['33+', 'Courses'], ['4k+', 'Students']].map(([num, label]) => (
+            <div key={label} className="flex flex-col">
+              <span className="text-2xl font-headline font-black text-primary">{num}</span>
+              <span className="text-xs text-on-surface-variant font-headline font-semibold">{label}</span>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -394,14 +406,15 @@ export const AcademyPage: React.FC = () => {
       </section>
 
       <section className="space-y-6">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+        <div className="flex flex-col gap-4">
           <div>
             <h2 className="text-headline-md text-primary font-bold">Training Divisions</h2>
             <p className="text-body-md text-on-surface-variant mt-2 max-w-2xl">
               Each division can work as a standalone academy vertical or combine into a complete global career pathway.
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          {/* Horizontally scrollable tabs on mobile */}
+          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide snap-x snap-mandatory">
             {divisions.map((division) => {
               const Icon = division.icon
               const isActive = division.id === activeDivision
@@ -410,10 +423,10 @@ export const AcademyPage: React.FC = () => {
                 <button
                   key={division.id}
                   onClick={() => setActiveDivision(division.id)}
-                  className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-headline font-bold transition-colors ${
+                  className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-headline font-bold transition-all duration-200 shrink-0 snap-start ${
                     isActive
-                      ? 'border-secondary bg-secondary text-white'
-                      : 'border-white/50 bg-white/50 text-on-surface-variant hover:text-primary'
+                      ? 'border-secondary bg-secondary text-white shadow-glow-secondary'
+                      : 'border-white/50 bg-white/50 text-on-surface-variant hover:text-primary hover:bg-white/80'
                   }`}
                 >
                   <Icon className="h-4 w-4" />
@@ -465,32 +478,42 @@ export const AcademyPage: React.FC = () => {
         </GlassCard>
       </section>
 
-      {/* COURSE CATALOG CARD REDESIGN (from Image 2) */}
+      {/* COURSE CATALOG */}
       <section className="space-y-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h2 className="text-headline-md text-primary font-bold">Featured Course Catalog</h2>
             <p className="text-body-md text-on-surface-variant mt-1">
               Skill up with our most popular professional programs.
             </p>
           </div>
-
           <button
             onClick={() => setActiveCategory('all')}
-            className="inline-flex items-center gap-1.5 text-sm font-headline font-bold text-secondary hover:text-primary transition-colors self-start md:self-auto"
+            className="inline-flex items-center gap-1.5 text-sm font-headline font-bold text-secondary hover:text-primary transition-colors self-start sm:self-auto shrink-0"
           >
-            View All Courses <ArrowRight className="h-4 w-4" />
+            View All <ArrowRight className="h-4 w-4" />
           </button>
         </div>
 
-        <div className="w-full overflow-x-auto pb-2">
+        <div className="w-full overflow-x-auto pb-2 scrollbar-hide">
           <GlassTabs tabs={tabs} activeTab={activeCategory} onChange={setActiveCategory} />
         </div>
 
         {loading ? (
-          <div className="text-center py-20 text-body-lg text-on-surface-variant">Loading courses...</div>
-        ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="rounded-2xl bg-white/40 border border-white/30 overflow-hidden animate-pulse">
+                <div className="h-44 bg-slate-200/60" />
+                <div className="p-5 space-y-3">
+                  <div className="h-3 bg-slate-200/80 rounded-full w-1/3" />
+                  <div className="h-4 bg-slate-200/80 rounded-full w-5/6" />
+                  <div className="h-3 bg-slate-200/60 rounded-full w-2/3" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {filteredCourses.map((course) => (
               <GlassCard
                 key={course.id}
@@ -504,7 +527,7 @@ export const AcademyPage: React.FC = () => {
                     alt={course.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-4">
                     <span className="bg-white/90 backdrop-blur-md text-primary font-headline text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
                       View Syllabus
                     </span>
@@ -517,7 +540,7 @@ export const AcademyPage: React.FC = () => {
                       {categoryLabels[course.category] ?? 'Academy'}
                     </span>
 
-                    <h3 className="font-headline text-body-lg font-bold text-primary leading-snug line-clamp-2 group-hover:text-secondary transition-colors">
+                    <h3 className="font-headline text-[15px] font-bold text-primary leading-snug line-clamp-2 group-hover:text-secondary transition-colors duration-200">
                       {course.title}
                     </h3>
 
@@ -539,17 +562,15 @@ export const AcademyPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="pt-2">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleOpenCourseDetails(course)
-                      }}
-                      className="w-full py-2.5 px-4 rounded-full border border-secondary text-secondary font-headline text-xs font-bold hover:bg-secondary hover:text-white transition-all shadow-sm"
-                    >
-                      View Syllabus & Enroll
-                    </button>
-                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleOpenCourseDetails(course)
+                    }}
+                    className="w-full py-2.5 px-4 rounded-full border border-secondary text-secondary font-headline text-xs font-bold hover:bg-secondary hover:text-white transition-all duration-200 shadow-sm mt-2"
+                  >
+                    View Syllabus & Enroll
+                  </button>
                 </div>
               </GlassCard>
             ))}
@@ -598,19 +619,25 @@ export const AcademyPage: React.FC = () => {
         </GlassCard>
       </section>
 
-      <section className="rounded-2xl bg-primary text-white px-6 py-8 md:px-10 md:py-10 shadow-glow-primary">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-8">
-            <div className="text-xs font-headline font-bold uppercase tracking-wider text-tertiary-container mb-3">
-              Vision
+      <section className="rounded-3xl bg-gradient-to-br from-primary to-primary-container text-white px-6 py-10 md:px-10 md:py-12 shadow-glow-primary overflow-hidden relative">
+        {/* Decorative blob */}
+        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-secondary/20 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-10 -left-10 w-56 h-56 rounded-full bg-tertiary/10 blur-3xl pointer-events-none" />
+        <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-8 space-y-3">
+            <div className="inline-flex items-center gap-2 text-xs font-headline font-bold uppercase tracking-wider text-tertiary-container border border-tertiary-container/30 bg-white/5 px-3 py-1 rounded-full">
+              <Sparkles className="h-3.5 w-3.5" />
+              Our Vision
             </div>
-            <p className="text-body-lg md:text-headline-md font-headline leading-relaxed">
+            <p className="text-body-lg md:text-headline-sm font-headline leading-relaxed text-white/90">
               To become India's leading global career and skill development academy, empowering students and professionals with the knowledge, language proficiency, AI skills, and international opportunities needed to succeed worldwide.
             </p>
           </div>
           <div className="lg:col-span-4 flex lg:justify-end">
-            <PillButton variant="secondary" className="!px-6 !py-3" onClick={() => navigate('/signup')}>
-              Build My Pathway
+            <PillButton variant="secondary" className="!px-7 !py-3.5 !text-sm" onClick={() => navigate('/signup')}>
+              <span className="inline-flex items-center gap-2">
+                Build My Pathway <ArrowRight className="h-4 w-4" />
+              </span>
             </PillButton>
           </div>
         </div>
