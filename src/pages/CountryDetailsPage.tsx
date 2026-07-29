@@ -142,35 +142,51 @@ export const CountryDetailsPage: React.FC = () => {
               {destination.universities.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {destination.universities.map((uni) => (
-                    <div key={uni.id} className="bg-white/50 border border-white/80 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow relative flex flex-col justify-between">
-                      <div className="absolute top-4 right-4 bg-primary text-white text-xs font-bold px-2 py-1 rounded-md">
-                        {uni.ranking}
-                      </div>
-                      
-                      <div className="mb-4">
-                        <h3 className="text-label-md text-primary text-lg font-bold mb-1">
-                          {uni.name}
-                        </h3>
-                        <p className="text-sm text-on-surface-variant flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[16px] text-outline">location_on</span>
-                          {uni.location}
-                        </p>
+                    <div key={uni.id} className="bg-white/60 border border-white/80 rounded-2xl p-6 shadow-sm hover:shadow-glass-hover transition-all duration-300 relative flex flex-col justify-between group">
+                      <div className="flex justify-between items-start mb-3 gap-2">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-10 h-10 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center font-headline font-black text-secondary text-sm shrink-0">
+                            {uni.name.replace(/^The\s+/, '').split(' ').map(w => w[0]).join('').slice(0, 3)}
+                          </div>
+                          <div>
+                            <h3 className="text-label-md text-primary text-base sm:text-lg font-bold leading-tight group-hover:text-secondary transition-colors">
+                              {uni.name}
+                            </h3>
+                            <p className="text-xs text-on-surface-variant flex items-center gap-1 mt-0.5 font-medium">
+                              <span className="material-symbols-outlined text-[14px] text-secondary">location_on</span>
+                              {uni.location}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="shrink-0 bg-primary text-white text-[11px] font-headline font-bold px-2.5 py-1 rounded-full shadow-sm">
+                          {uni.ranking}
+                        </div>
                       </div>
 
-                      <div className="space-y-2 border-t border-white/40 pt-4 mt-2">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-on-surface-variant">Avg. Tuition:</span>
-                          <span className="font-semibold text-primary">{uni.tuitionFee}</span>
+                      <div className="space-y-3 border-t border-white/50 pt-4 mt-2">
+                        <div className="flex justify-between text-xs sm:text-sm">
+                          <span className="text-on-surface-variant font-medium">Avg. Tuition:</span>
+                          <span className="font-bold text-primary">{uni.tuitionFee}</span>
                         </div>
-                        <div className="text-sm mt-2">
-                          <span className="text-on-surface-variant font-bold block mb-1">Popular programs:</span>
-                          <div className="flex flex-wrap gap-1.5 mt-1">
+                        <div className="text-xs">
+                          <span className="text-on-surface-variant font-bold block mb-1.5">Top Programs & Majors:</span>
+                          <div className="flex flex-wrap gap-1.5">
                             {uni.popularPrograms.map((p, i) => (
-                              <span key={i} className="text-[11px] bg-secondary/10 text-secondary border border-secondary/20 px-2 py-0.5 rounded-full">
+                              <span key={i} className="text-[11px] bg-secondary/10 text-secondary border border-secondary/20 px-2.5 py-0.5 rounded-full font-medium">
                                 {p}
                               </span>
                             ))}
                           </div>
+                        </div>
+                        
+                        <div className="pt-2">
+                          <button
+                            onClick={() => navigate(`/search?q=${encodeURIComponent(uni.name)}`)}
+                            className="w-full py-2 px-3 rounded-xl bg-white/70 hover:bg-secondary hover:text-white border border-white/80 text-xs font-headline font-bold text-primary transition-all duration-200 flex items-center justify-center gap-1.5 shadow-sm"
+                          >
+                            <span className="material-symbols-outlined text-[15px]">search</span>
+                            Explore Programs at {uni.name.split(' ')[0]}
+                          </button>
                         </div>
                       </div>
                     </div>
